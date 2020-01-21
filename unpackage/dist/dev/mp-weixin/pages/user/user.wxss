@@ -1,0 +1,14 @@
+
+.content {
+	width: 90%;
+	overflow: hidden;
+}
+.xd-drift{
+	overflow: hidden;
+	left: 0rpx;
+	position: absolute;
+	top: 0px;
+}
+.btn-row {
+}
+

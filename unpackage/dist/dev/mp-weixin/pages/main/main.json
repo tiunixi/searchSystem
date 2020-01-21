@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "登录模板",
+  "usingComponents": {
+    "fish": "/components/xiaodiu-fish/xiaodiu-fish"
+  }
+}
