@@ -1,0 +1,59 @@
+
+.content.data-v-1484f80e {
+		width: 90%;
+		overflow: hidden;
+}
+.xd-drift.data-v-1484f80e{
+		overflow: hidden;
+		left: 0rpx;
+		position: absolute;
+		top: 0px;
+		margin-bottom: ;
+}
+.drift-bo2.data-v-1484f80e{
+		margin-bottom:35px;
+}
+.xd-drift.data-v-1484f80e{
+ 
+	width:100%;
+	height:250px;
+}
+.fish.data-v-1484f80e{
+	 width:40px;
+	 height:30px;
+	 position:fixed;
+	 bottom:80px;
+	 left:260px;
+}
+.px.data-v-1484f80e{
+	 width:30px;
+	 height:30px;
+	 position:relative;
+	 bottom:40px;
+	 left:120px;
+}
+.drift-bo1.data-v-1484f80e{
+	position:fixed;
+	/* top:230rpx; */
+	top:110px;
+	left:0;
+	width:200%;
+	 height: 25px; 
+	 overflow:hidden
+}
+.drift-bo2.data-v-1484f80e{
+	position:fixed;
+	/* top:250rpx; */
+	top:120px;
+	left:0;
+	width:200%;
+	 height: 25px; 
+	 overflow:hidden
+}
+.drift-mbo.data-v-1484f80e{
+	 width: 44px; 
+	height: 22px;
+}
+ 
+ 
+

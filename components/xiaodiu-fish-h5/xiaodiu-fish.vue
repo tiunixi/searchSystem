@@ -4,15 +4,12 @@
 		 
 		<view class="drift-bo1"  :style="{left:(btleft-5)+'px'}" >
 			<image    v-for="one in bolist1" class="drift-mbo"     src="../../static/xiaodiu-fish/fish_mbo1.png" ></image>
-			
 		</view>
-		   <view class="drift-bo2"  :style="{left:btleft+'px'}" >
-		   	<image    v-for="one in bolist1" class="drift-mbo"     src="../../static/xiaodiu-fish/fish_mbo2.png" ></image>
-		   	
-		   </view>
+	 <view class="drift-bo2"  :style="{left:btleft+'px'}" >
+		   	<image    v-for="one in bolist1" class="drift-mbo"     src="../../static/xiaodiu-fish/fish_mbo2.png" ></image></view>
 		   
-		   <image v-for="one in fishlist" class="fish" :style="{left:one.x+'px',top:one.y+'px'}" src="../../static/xiaodiu-fish/fish_fish.png">  </image> 	 
-	       <image class="px" src="../../static/xiaodiu-fish/fish_px.png">  </image>
+	   <image v-for="one in fishlist" class="fish" :style="{left:one.x+'px',top:one.y+'px'}" src="../../static/xiaodiu-fish/fish_fish.png">  </image> 	 
+	   <image class="px" src="../../static/xiaodiu-fish/fish_px.png">  </image>
 	 	 
 		 
 	</view>
@@ -62,7 +59,7 @@
 		for(var m=0;m<this.fishsum;m++){
 			         var vote = {};
 			          vote.x = Math.random()*this.windowWidth;
-			          vote.y = 80+Math.random()*140;
+			          vote.y = 130+Math.random()*140;
 					  vote.s=Math.random()*this.fishmaxspeed*10+10;
 			          this.fishlist.push(vote);
 			 
@@ -81,7 +78,7 @@
 				for(var m=0;m<sum;m++){
 					         var vote = {};
 					          vote.x = Math.random()*this.windowWidth;
-					          vote.y = 80+Math.random()*140;
+					          vote.y = 130+Math.random()*140;
 							  vote.s=Math.random()*this.fishmaxspeed*10+10;
 					          this.fishlist.push(vote);
 					 
@@ -118,7 +115,23 @@
 </script>
 
 
-<style>
+<style scoped>
+	.content {
+		width: 90%;
+		overflow: hidden;
+	}
+		
+	.xd-drift{
+		overflow: hidden;
+		left: 0upx;
+		position: absolute;
+		top: 0px;
+		margin-bottom: ;
+	}
+		
+	.drift-bo2{
+		margin-bottom:35px;
+	}
 .xd-drift{
  
 	width:100%;
@@ -143,7 +156,8 @@
 
 .drift-bo1{
 	position:fixed;
-	top:70px;
+	/* top:230rpx; */
+	top:110px;
 	left:0;
 	width:200%;
 	 height: 25px; 
@@ -152,7 +166,8 @@
 
 .drift-bo2{
 	position:fixed;
-	top:80px;
+	/* top:250rpx; */
+	top:120px;
 	left:0;
 	width:200%;
 	 height: 25px; 

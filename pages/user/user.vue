@@ -1,10 +1,11 @@
 <template>
 	<view class="content">
+		<!-- #ifdef MP-WEIXIN -->
+		<fishWx ref = "fish"  :fishsum="5"  :bospeed="2" :fishmaxspeed="3" ></fishWx>
+		<!-- #endif -->
+		<!--  #ifdef H5 -->
 		<fish ref = "fish"  :fishsum="5"  :bospeed="2" :fishmaxspeed="3" ></fish>
-		<!-- <view class="btn-row">
-			<button v-if="!hasLogin" type="primary" class="primary" @tap="bindLogin">登录</button>
-			<button v-if="hasLogin" type="default" @tap="bindLogout">退出登录</button>
-		</view> -->
+		<!-- #endif -->
 	</view>
 </template>
 
@@ -13,12 +14,13 @@
 		mapState,
 		mapMutations
 	} from 'vuex'
-	import fish from "@/components/xiaodiu-fish/xiaodiu-fish.vue"
+	import fish from "@/components/xiaodiu-fish-h5/xiaodiu-fish.vue"
+	import fishWx from "@/components/xiaodiu-fish-wx/xiaodiu-fish.vue"
 	export default {
 		computed: {
 			...mapState(['hasLogin', 'forcedLogin'])
 		},
-		components: {fish},
+		components: {fish,fishWx},
 		methods: {
 			...mapMutations(['logout']),
 			bindLogin() {
@@ -41,19 +43,22 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	.content {
 		width: 90%;
+		padding: 0;
 		overflow: hidden;
-	}
+	}/* 
 		
 	.xd-drift{
 		overflow: hidden;
 		left: 0upx;
 		position: absolute;
 		top: 0px;
+		margin-bottom: ;
 	}
-	.btn-row {
 		
-	}
+	.drift-bo2{
+		margin-bottom:35px;
+	} */
 </style>

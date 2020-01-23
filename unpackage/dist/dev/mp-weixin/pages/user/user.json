@@ -1,6 +1,7 @@
 {
   "navigationBarTitleText": "我的",
   "usingComponents": {
-    "fish": "/components/xiaodiu-fish/xiaodiu-fish"
+    "fish": "/components/xiaodiu-fish-h5/xiaodiu-fish",
+    "fish-wx": "/components/xiaodiu-fish-wx/xiaodiu-fish"
   }
 }

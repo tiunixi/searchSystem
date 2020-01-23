@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		  <fish ref = "fish"  :fishsum="5"  :bospeed="2" :fishmaxspeed="3" ></fish>
-		<!-- <view v-if="hasLogin" class="hello">
+		<view v-if="hasLogin" class="hello">
 			<view class="title">
 				您好 {{userName}}，您已成功登录。
 			</view>
@@ -18,7 +18,7 @@
 				<view>这是 uni-app 带登录模板的示例App首页。</view>
 				<view>在 “我的” 中点击 “登录” 可以 “登录您的账户”</view>
 			</view>
-		</view> -->
+		</view>
 	</view>
 </template>
 
@@ -26,10 +26,10 @@
 	import {
 		mapState
 	} from 'vuex'
-	import fish from "@/components/xiaodiu-fish/xiaodiu-fish.vue"
+	// import fish from "@/components/xiaodiu-fish/xiaodiu-fish.vue"
 	export default {
 		computed: mapState(['forcedLogin', 'hasLogin', 'userName']),
-		components: {fish},
+		// components: {fish},
 		onLoad() {
 			if (!this.hasLogin) {
 				uni.showModal({
