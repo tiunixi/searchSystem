@@ -1,14 +1,11 @@
 
-.content.data-v-1484f80e {
-		width: 90%;
-		overflow: hidden;
+.fish-h5-left.data-v-1484f80e{
+		position: relative;
+		width:100%;
+		height:250px;
 }
 .xd-drift.data-v-1484f80e{
 		overflow: hidden;
-		left: 0rpx;
-		position: absolute;
-		top: 0px;
-		margin-bottom: ;
 }
 .drift-bo2.data-v-1484f80e{
 		margin-bottom:35px;

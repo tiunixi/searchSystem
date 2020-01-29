@@ -135,7 +135,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 var _default =
 {
   name: "fish",
@@ -196,6 +195,7 @@ var _default =
     },
     addfish: function addfish(sum) {
       //+鱼的数目
+      console.log(sum);
       for (var m = 0; m < sum; m++) {
         var vote = {};
         vote.x = Math.random() * this.windowWidth;

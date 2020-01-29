@@ -8667,11 +8667,16 @@ var store = new _vuex.default.Store({
             */
     forcedLogin: false,
     hasLogin: false,
-    userName: "" },
+    userName: "",
+    avatarUrl: '' },
 
   mutations: {
     login: function login(state, userName) {
       state.userName = userName || '新用户';
+      state.hasLogin = true;
+    },
+    url: function url(state, avatarUrl) {
+      state.avatarUrl = avatarUrl || "../../static/img/weixin.png";
       state.hasLogin = true;
     },
     logout: function logout(state) {

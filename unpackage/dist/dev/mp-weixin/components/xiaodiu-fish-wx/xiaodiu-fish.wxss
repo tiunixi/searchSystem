@@ -1,5 +1,15 @@
 
 .xd-drift.data-v-74e76c65{
+		overflow: hidden;
+		/* left: 0upx;
+		position: absolute;
+		top: 0px; 
+		margin-bottom: ;*/
+}
+.drift-bo2.data-v-74e76c65{
+		margin-bottom:35px;
+}
+.xd-drift.data-v-74e76c65{
  
 	width:100%;
 	height:250px;

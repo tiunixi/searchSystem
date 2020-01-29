@@ -10,11 +10,16 @@ const store = new Vuex.Store({
 		 */
 		forcedLogin: false,
 		hasLogin: false,
-		userName: ""
+		userName: "",
+		avatarUrl:''
 	},
 	mutations: {
 		login(state, userName) {
 			state.userName = userName || '新用户';
+			state.hasLogin = true;
+		},
+		url(state, avatarUrl) {
+			state.avatarUrl = avatarUrl || "../../static/img/weixin.png";
 			state.hasLogin = true;
 		},
 		logout(state) {

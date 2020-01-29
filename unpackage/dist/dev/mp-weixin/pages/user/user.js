@@ -145,6 +145,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
 var _vuex = __webpack_require__(/*! vuex */ 16);function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var fish = function fish() {return __webpack_require__.e(/*! import() | components/xiaodiu-fish-h5/xiaodiu-fish */ "components/xiaodiu-fish-h5/xiaodiu-fish").then(__webpack_require__.bind(null, /*! @/components/xiaodiu-fish-h5/xiaodiu-fish.vue */ 61));};var fishWx = function fishWx() {return __webpack_require__.e(/*! import() | components/xiaodiu-fish-wx/xiaodiu-fish */ "components/xiaodiu-fish-wx/xiaodiu-fish").then(__webpack_require__.bind(null, /*! @/components/xiaodiu-fish-wx/xiaodiu-fish.vue */ 68));};var _default =
 
 
@@ -173,6 +182,9 @@ var _vuex = __webpack_require__(/*! vuex */ 16);function _objectSpread(target) {
           url: '../login/login' });
 
       }
+    },
+    bug: function bug() {
+      this.$refs.fishWx.addfish(1);
     } }) };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

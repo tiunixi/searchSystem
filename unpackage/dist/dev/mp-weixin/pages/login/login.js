@@ -188,12 +188,13 @@ var _vuex = __webpack_require__(/*! vuex */ 16);function _interopRequireDefault(
   },
   computed: (0, _vuex.mapState)(['forcedLogin']),
   methods: _objectSpread({},
-  (0, _vuex.mapMutations)(['login']), {
+  (0, _vuex.mapMutations)(['login', 'url']), {
     initProvider: function initProvider() {var _this = this;
       var filters = ['weixin', 'qq', 'sinaweibo'];
       uni.getProvider({
         service: 'oauth',
         success: function success(res) {
+          console.log(res);
           if (res.provider && res.provider.length) {
             for (var i = 0; i < res.provider.length; i++) {
               if (~filters.indexOf(res.provider[i])) {
@@ -201,6 +202,7 @@ var _vuex = __webpack_require__(/*! vuex */ 16);function _interopRequireDefault(
                   value: res.provider[i],
                   image: '../../static/img/' + res.provider[i] + '.png' });
 
+                console.log(_this.providerList);
               }
             }
             _this.hasProvider = true;
@@ -265,11 +267,15 @@ var _vuex = __webpack_require__(/*! vuex */ 16);function _interopRequireDefault(
           uni.getUserInfo({
             provider: value,
             success: function success(infoRes) {
+              console.log(res);
+              console.log(infoRes);
+              console.log(infoRes.userInfo.avatarUrl);
               /**
-                                                 * 实际开发中，获取用户信息后，需要将信息上报至服务端。
-                                                 * 服务端可以用 userInfo.openId 作为用户的唯一标识新增或绑定用户信息。
-                                                 */
+                                                        * 实际开发中，获取用户信息后，需要将信息上报至服务端。
+                                                        * 服务端可以用 userInfo.openId 作为用户的唯一标识新增或绑定用户信息。
+                                                        */
               _this2.toMain(infoRes.userInfo.nickName);
+              _this2.toUrl(infoRes.userInfo.avatarUrl);
             },
             fail: function fail() {
               uni.showToast({
@@ -295,6 +301,21 @@ var _vuex = __webpack_require__(/*! vuex */ 16);function _interopRequireDefault(
           title: '登陆失败' });
 
       }
+    },
+    toUrl: function toUrl(avatarUrl) {
+      this.url(avatarUrl);
+      /**
+                            * 强制登录时使用reLaunch方式跳转过来
+                            * 返回首页也使用reLaunch方式
+                            */
+      if (this.forcedLogin) {
+        uni.reLaunch({
+          url: '../main/main' });
+
+      } else {
+        uni.navigateBack();
+      }
+
     },
     toMain: function toMain(userName) {
       this.login(userName);

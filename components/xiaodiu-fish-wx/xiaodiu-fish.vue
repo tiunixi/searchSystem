@@ -3,18 +3,17 @@
 		<image style="width: 100%; height: 100%; "    src="../../static/xiaodiu-fish/fish_home.png" ></image>
 		 
 		<view class="drift-bo1"  :style="{left:(btleft-5)+'px'}" >
-			<image    v-for="one in bolist1" class="drift-mbo"     src="../../static/xiaodiu-fish/fish_mbo1.png" ></image>
+			<image    v-for="one in bolist1" wx:key="key" class="drift-mbo"     src="../../static/xiaodiu-fish/fish_mbo1.png" ></image>
 			
 		</view>
 		   <view class="drift-bo2"  :style="{left:btleft+'px'}" >
-		   	<image    v-for="one in bolist1" class="drift-mbo"     src="../../static/xiaodiu-fish/fish_mbo2.png" ></image>
+		   	<image    v-for="one in bolist1" wx:key="key" class="drift-mbo"     src="../../static/xiaodiu-fish/fish_mbo2.png" ></image>
 		   	
 		   </view>
 		   
-		   <image v-for="one in fishlist" class="fish" :style="{left:one.x+'px',top:one.y+'px'}" src="../../static/xiaodiu-fish/fish_fish.png">  </image> 	 
+		   <image v-for="one in fishlist" wx:key="key" class="fish" :style="{left:one.x+'px',top:one.y+'px'}" src="../../static/xiaodiu-fish/fish_fish.png">  </image> 	 
 	       <image class="px" src="../../static/xiaodiu-fish/fish_px.png">  </image>
 	 	 
-		 
 	</view>
 </template>
 
@@ -78,6 +77,7 @@
 	        },
 			addfish(sum){
 				//+鱼的数目
+				console.log(sum)
 				for(var m=0;m<sum;m++){
 					         var vote = {};
 					          vote.x = Math.random()*this.windowWidth;
@@ -119,6 +119,17 @@
 
 
 <style scoped>
+	.xd-drift{
+		overflow: hidden;
+		/* left: 0upx;
+		position: absolute;
+		top: 0px; 
+		margin-bottom: ;*/
+	}
+		
+	.drift-bo2{
+		margin-bottom:35px;
+	}
 .xd-drift{
  
 	width:100%;

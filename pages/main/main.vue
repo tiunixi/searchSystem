@@ -5,6 +5,7 @@
 			<view class="title">
 				您好 {{userName}}，您已成功登录。
 			</view>
+			<image :src="avatarUrl" mode=""></image>
 			<view class="ul">
 				<view>这是 uni-app 带登录模板的示例App首页。</view>
 				<view>在 “我的” 中点击 “退出” 可以 “注销当前账户”</view>
@@ -23,12 +24,12 @@
 </template>
 
 <script>
-	import {
-		mapState
-	} from 'vuex'
+		import {
+			mapState
+		} from 'vuex'
 	// import fish from "@/components/xiaodiu-fish/xiaodiu-fish.vue"
 	export default {
-		computed: mapState(['forcedLogin', 'hasLogin', 'userName']),
+		computed: mapState(['forcedLogin', 'hasLogin', 'userName','avatarUrl']),
 		// components: {fish},
 		onLoad() {
 			if (!this.hasLogin) {

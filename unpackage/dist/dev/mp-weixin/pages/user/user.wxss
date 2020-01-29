@@ -1,9 +1,16 @@
 
+.user.data-v-02398072 {
+	position: relative;
+	width: 100%;
+}
 .content.data-v-02398072 {
-	width: 90%;
+	width: 100%;
 	padding: 0;
 	overflow: hidden;
-}/* 
+	/* position: absolute;
+	bottom: 0; */
+}
+/* 
 	
 .xd-drift{
 	overflow: hidden;

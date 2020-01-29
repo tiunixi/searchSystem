@@ -53,12 +53,13 @@
 		},
 		computed: mapState(['forcedLogin']),
 		methods: {
-			...mapMutations(['login']),
+			...mapMutations(['login','url']),
 			initProvider() {
 				const filters = ['weixin', 'qq', 'sinaweibo'];
 				uni.getProvider({
 					service: 'oauth',
 					success: (res) => {
+						console.log(res)
 						if (res.provider && res.provider.length) {
 							for (let i = 0; i < res.provider.length; i++) {
 								if (~filters.indexOf(res.provider[i])) {
@@ -66,6 +67,7 @@
 										value: res.provider[i],
 										image: '../../static/img/' + res.provider[i] + '.png'
 									});
+									console.log(this.providerList)
 								}
 							}
 							this.hasProvider = true;
@@ -130,11 +132,15 @@
 						uni.getUserInfo({
 							provider: value,
 							success: (infoRes) => {
+								console.log(res)
+								console.log(infoRes)
+								console.log(infoRes.userInfo.avatarUrl)
 								/**
 								 * 实际开发中，获取用户信息后，需要将信息上报至服务端。
 								 * 服务端可以用 userInfo.openId 作为用户的唯一标识新增或绑定用户信息。
 								 */
 								this.toMain(infoRes.userInfo.nickName);
+								this.toUrl(infoRes.userInfo.avatarUrl);
 							},
 							fail() {
 								uni.showToast({
@@ -160,6 +166,21 @@
 						title: '登陆失败'
 					});
 				}
+			},
+			toUrl(avatarUrl) {
+				this.url(avatarUrl);
+				/**
+				 * 强制登录时使用reLaunch方式跳转过来
+				 * 返回首页也使用reLaunch方式
+				 */
+				if (this.forcedLogin) {
+					uni.reLaunch({
+						url: '../main/main',
+					});
+				} else {
+					uni.navigateBack();
+				}
+			
 			},
 			toMain(userName) {
 				this.login(userName);
