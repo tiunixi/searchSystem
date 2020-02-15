@@ -142,6 +142,7 @@
 	 position:fixed;
 	 bottom:80px;
 	 left:260px;
+	 z-index: 998;
  }
  
  .px{

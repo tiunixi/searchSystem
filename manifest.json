@@ -65,5 +65,19 @@
     },
     "mp-toutiao" : {
         "usingComponents" : true
-    }
+    },
+	
+    "h5": {
+        "devServer": {
+			"proxy": {
+				"/api": {                    
+					"target":"http://www.luominus.com",
+					"changeOrigin": true,//是否跨域
+					"secure": false,// 设置支持https协议的代理
+					 "pathRewrite":{"^/api":"/"}
+					// "pathRewrite":{"^/dpc":""}
+				}
+			}
+		}
+	}
 }

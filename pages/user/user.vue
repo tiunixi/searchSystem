@@ -2,18 +2,32 @@
 	<view class="user">
 		<view class="content">
 			<!-- #ifdef MP-WEIXIN -->
-			<fishWx ref = "fishWx"  :fishsum="5"  :bospeed="2" :fishmaxspeed="3" ></fishWx>
+			<fishWx ref = "fishWx"  :fishsum="myFish(fishsum)"  :bospeed="2" :fishmaxspeed="3" ></fishWx>
 			<!-- #endif -->
 			<!--  #ifdef H5 -->
-			<fish ref = "fish"  :fishsum="5"  :bospeed="2" :fishmaxspeed="3" ></fish>
+			<fish ref = "fish"  :fishsum="myFish(fishsum)"  :bospeed="2" :fishmaxspeed="3" ></fish>
 			<!-- #endif -->
 		</view>
+		<!-- <view class="fish-button" v-if="hasLogin"> -->
+		<view class="fish-button">
+			<view class="my-fish">
+				<p>我的小鱼</p>
+				<p>{{myFish(fishsum)}}</p>
+			</view>
+			<button type="" @click="sell(1)" class="sell">卖小鱼</button>
+			<button type="" @click="bug(1)" class="bug">买小鱼</button>
+		</view>
+		
+		<view class="center_menu">
+			<view class="menu_item" v-for="item in menus" @tap="menuTap(item.key)">
+				<image :src="item.icon" mode="aspectFill"></image>
+				<text>{{item.name}}</text>
+			</view>
+		</view>
+		
 		<view class="btn-row">
 			<button v-if="!hasLogin" type="primary" class="primary" @tap="bindLogin">登录</button>
-			<button v-if="hasLogin" type="default" @tap="bindLogout">退出登录</button>
-		</view>
-		<view class="fish-button" v-if="hasLogin">
-			<button type="default" @click="bug(1)">买鱼</button>
+			<button v-if="hasLogin" type="default" class="primary" @tap="bindLogout">退出登录</button>
 		</view>
 	</view>
 </template>
@@ -26,6 +40,44 @@
 	import fish from "@/components/xiaodiu-fish-h5/xiaodiu-fish.vue"
 	import fishWx from "@/components/xiaodiu-fish-wx/xiaodiu-fish.vue"
 	export default {
+		data () {
+		   return {
+		    fishsum: 8,
+			menus: [{
+						name: '我的收藏',
+						icon: '../../static/fumou-center-template/5.png',
+						key: 1,
+					},
+					{
+						name: '签到',
+						icon: '../../static/fumou-center-template/6.png',
+						key: 2,
+					},
+					// {
+					// 	name: '意见反馈',
+					// 	icon: '../../static/fumou-center-template/7.png',
+					// 	key: 3,
+					// },
+					// {
+					// 	name: '帮助中心',
+					// 	icon: '../../static/fumou-center-template/8.png',
+					// 	key: 4,
+					// },
+					// {
+					// 	name: '意见反馈',
+					// 	icon: '../../static/fumou-center-template/9.png',
+					// 	key: 5,
+					// },
+					// {
+					// 	name: '关于我们',
+					// 	icon: '../../static/fumou-center-template/10.png',
+					// 	key: 6,
+					// }
+			
+				]
+			
+		   }
+		},
 		computed: {
 			...mapState(['hasLogin', 'forcedLogin'])
 		},
@@ -49,25 +101,168 @@
 				}
 			},
 			bug() {
+				this.fishsum++;
+				// #ifdef MP-WEIXIN
 				 this.$refs.fishWx.addfish(1)
+				 // #endif
+				 // #ifdef H5
+				 this.$refs.fish.addfish(1)
+				 // #endif
+			},
+			sell() {
+					
+				if (this.fishsum !== 0){
+					this.fishsum--;
+				}
+				else {
+					uni.showToast({
+						title:"您已经没有小鱼了哦~",
+						icon:"none"
+					})
+				}
+				// #ifdef MP-WEIXIN
+				 this.$refs.fishWx.reducefish(1)
+				 // #endif
+				 // #ifdef H5
+				 this.$refs.fish.reducefish(1)
+				 // #endif
+			},
+			myFish(fishsum) {
+				// #ifdef MP-WEIXIN
+					return fishsum
+				// #endif
+				
+				// #ifdef H5
+					return fishsum
+				// #endif
 			}
-			
+			,menuTap(key) {
+				if (key === 1) {
+					uni.reLaunch({
+						url: '../favorite/favorite',
+					});
+				}
+				else if (key === 2) {
+					uni.reLaunch({
+						url: '../Calendar/Calendar',
+					});
+				}
+			}
 		}
 	}
 </script>
 
-<style scoped>
+<style scoped lang="less">
 	.user {
 		position: relative;
 		width: 100%;
+		.uni-page-head-btn {
+			display: block !important;
+		}
 	}
+	.btn-row {
+		// display: inline-block;
+		// position: absolute;
+		// top: 0px;
+		// left: 290upx;
+		// margin-top: 0px;
+		// padding: 10px;
+		.primary {
+			// font-size: 30upx;
+			// border-radius: 50%;
+			// width: 130upx;
+			// height: 130upx;
+			// line-height: 130upx;
+		}
+	}	
 	.content {
 		width: 100%;
 		padding: 0;
 		overflow: hidden;
+		z-index: 998;
 		/* position: absolute;
 		bottom: 0; */
-	}/* 
+	}
+	.fish-button {		
+		z-index: 999;
+		display: flex;
+		background: #fff;
+		margin-top: 20upx;
+		width: 100%;
+	}
+	.bug {
+		width: 20%;
+		font-size: 20upx;
+		line-height: 64upx;
+		border-radius: 35upx;
+		border: none;
+		background: #3cb371;
+		color: #fff;
+	}
+	.sell {
+		width: 20%;
+		font-size: 20upx;
+		line-height: 64upx;
+		border-radius: 35upx;
+		border: none;
+		background: #ff6666;
+		color: #fff;
+	}
+	.my-fish {
+		font-size: 25upx;
+		width: 30%;
+		display: flex;
+		flex-direction:column
+	}
+	.my-fish p {
+		text-align:center
+	}
+	.center_menu {
+			width: 100%;
+			display: inline-block;
+			background: #fff;
+			.menu_item {
+				font-size: 28upx;
+				letter-spacing: 1px;
+				padding: 14px 5%;
+				background: #FEFEFE;
+				overflow: hidden;
+				box-sizing: border-box;
+				display: flex;
+				align-items: center;
+				position: relative;
+				border-bottom: 1px solid #EFEFEF;
+	
+				&:hover {
+					background: #F6F6F6 !important;
+				}
+	
+				&::after {
+					content: '';
+					width: 30upx;
+					height: 30upx;
+					position: absolute;
+					right: 5%;
+					background: url('../../static/fumou-center-template/right.png') no-repeat;
+					background-size: 100%;
+				}
+	
+				text:nth-of-type(1) {
+					margin-left: 10px;
+				}
+	
+				image {
+					width: 40upx;
+					height: 40upx;
+				}
+	
+				&:nth-of-type(4) {
+					margin-top: 10px;
+				}
+			}
+		}
+	
+	/* 
 		
 	.xd-drift{
 		overflow: hidden;
