@@ -22,7 +22,8 @@
 		</view>
 		<view class="page_content">
 			<view class="menu">
-				<tabControl :current="current" :values="items" bgc="#fff" :fixed="true" :scrollFlag='true' :isEqually='true' @clickItem="onClickItem" ></tabControl>
+				<tabControl :current="current" :values="items" bgc="#fff" :fixed="true" :scrollFlag='true' :isEqually='true'
+				 @clickItem="onClickItem"></tabControl>
 				<!-- 使用 swiper 配合 滑动切换 -->
 				<swiper class="swiper" style="height: 100%;width: 100%;" @change='scollSwiper' :current='current'>
 					<swiper-item v-for="(items,index) in menu" :key='index'>
@@ -32,14 +33,13 @@
 							<view class="menu_item" v-for="(item,index) in items" :key='index'>
 								<view class="word_card" @tap="toWordPage(item.id)">
 									<view class="left in_b">
-										词汇：{{ item.word }}
+										{{ item.key }}
 									</view>
 									<view class="right in_b">
-										浏览量：{{ item.AllPageView }}
+										<image src="../../static/img/eye.png" ></image>
+										{{ item.clickNum }}
 									</view>
-									<view class="clear">
-										
-									</view>
+									<view class="clear"></view>
 								</view>
 							</view>
 						</scroll-view>
@@ -52,70 +52,42 @@
 
 <script>
 	import tabControl from '@/components/tabControl-tag/tabControl-tag.vue';
-	 const BASE_URL = 'http://www.lexicon.com/';
-	 import uniRequest from 'uni-request';
+	import uniRequest from 'uni-request';
+	import service from '../../service.js';
+	const BASE_URL = 'http://www.lexicon.com/';
+	const validUser = service.getUsers();
+	const data = {
+		sid: validUser[0].s_id
+	}
 	export default {
-		components:{tabControl},
+		components: {
+			tabControl
+		},
 		data() {
 			return {
 				items: ['本站', '中国网站', '外国网站'],
 				menu: [
-					[{word:'1',AllPageView:'122',id:1},
-					{word:'1',AllPageView:'122',id:2},
-					{word:'1',AllPageView:'122',id:3},
-					{word:'1',AllPageView:'122',id:4},
-					{word:'1',AllPageView:'122',id:5},
-					{word:'1',AllPageView:'122',id:6},
-					{word:'1',AllPageView:'122',id:7},
-					{word:'1',AllPageView:'122',id:8},
-				], 
-					[{word:'2',AllPageView:'222',id:9},
-					{word:'2',AllPageView:'222',id:10},
-					{word:'2',AllPageView:'222',id:11},
-				], 
-					[{word:'3',AllPageView:'322',id:12},
-					{word:'3',AllPageView:'322',id:13},
-					{word:'3',AllPageView:'322',id:14},
-					]],
+					
+				],
 				current: 0,
 			}
 		},
 		onShow() {
-			const newData = {
-				token: 'hy3fB7yKi8dWZtgCyrJYRA=='
-			}
-			var  that = this
-			
-			// uni.request({
-			// 		url:BASE_URL + "api/v1/Index/indexData",  
-			// 		data: newData,  
-			// 		method:'GET',  
-			// 		dataType:'json',  
-			// 		header:{  
-			// 			'content-type':'application/json'  
-			// 		},
-			// 		success(e){  
-			// 			console.log(e) 
-			// 			 if (e.statusCode === 200) {
-			// 			 	if (e.data.code === 200) {
-			// 			 		var myData = e.data.data
-			// 			 		that.menus = {
-			// 			 			all_income: myData.all_income,
-			// 			 			status: myData.status,
-			// 			 			limit: myData.limit,
-			// 			 			today_order_num: myData.today_order_num,
-			// 			 			today_success_order_num: myData.today_success_order_num,
-			// 			 			today_price: myData.today_price,
-			// 			 			today_success_price: myData.today_success_price,
-			// 			 			today_income: myData.today_income,
-			// 			 			todo_price: myData.todo_price,
-			// 			 		}
-			// 			 	}
-			// 			 }
-			// 		},  
-			// 	})
-			
-			},
+			var that = this;
+			uniRequest.post(BASE_URL + "index/index/index", data).then(function(response) {
+				if (response.status === 200 && response.data.code === 200) {
+					that.items = response.data.data.items
+					that.menu = response.data.data.menu
+				} else {
+					uni.showToast({
+						icon: 'none',
+						title: response.data.msg
+					});
+				}
+			}).catch(function(error) {
+				console.log(error);
+			});
+		},
 		methods: {
 			searchPage() {
 				uni.navigateTo({
@@ -126,11 +98,13 @@
 				uni.navigateTo({
 					url: '../HM-search/HM-search',
 				});
-			},toSign() {
+			},
+			toSign() {
 				uni.navigateTo({
 					url: '../Calendar/Calendar',
 				});
-			},toFavorite() {
+			},
+			toFavorite() {
 				uni.navigateTo({
 					url: '../favorite/favorite',
 				});
@@ -138,12 +112,12 @@
 			onClickItem(val) {
 				this.current = val.currentIndex
 			},
-			scollSwiper(e){
+			scollSwiper(e) {
 				this.current = e.target.current
 			},
 			toWordPage(id) {
 				uni.navigateTo({
-					url: '../myPage/myPage?id='+id,
+					url: '../myPage/myPage?id=' + id,
 				});
 			},
 		}
@@ -160,24 +134,28 @@
 	@function realSize($args) {
 		@return $args / 1.5;
 	}
-	.in_b{
+
+	.in_b {
 		display: inline-block;
 	}
+
 	.page_edu {
 		width: 100%;
 	}
-		
+
 	.menu {
 		uni-scroll-view {
 			display: block;
 			width: 90%;
 		}
 	}
+
 	.swiper {
 		margin-top: 100upx;
 		padding: 25upx;
 		text-align: center;
 	}
+
 	.page_edu_header {
 		padding-top: var(--status-bar-height);
 		background-color: #00aeff;
@@ -259,6 +237,7 @@
 					justify-content: center;
 				}
 			}
+			
 		}
 	}
 
@@ -279,17 +258,47 @@
 			flex-direction: row;
 			align-items: stretch;
 			justify-content: space-between;
-			.left{
+
+			.left {
 				float: left;
+				height: 35px;
+				line-height: 35px;
 			}
-			.right{
+
+			.right {
 				float: right;
+				height: 35px;
+				line-height: 35px;
 			}
-			.clear{
+
+			.clear {
 				clear: both;
 				margin-bottom: 20upx;
 			}
+			.word_card{
+				height: 35px;
+				line-height: 35px;
+				// overflow: hidden;
+				uni-image {
+				    width: 40upx; 
+				    height: 40upx;
+				    display: inline-block;
+				    overflow: hidden;
+				    position: relative;
+					padding-right: 10upx;
+					line-height: 40upx;
+				}
+				
+				uni-image>div, uni-image>img {
+				    width: 100%;
+				    height: 100%;
+					margin-top:3px;
+				}
+			}
+			.right——img{
+				width: 30upx;
+				height: 30upx;
+			}
 		}
 	}
-
 </style>

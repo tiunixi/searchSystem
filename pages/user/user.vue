@@ -119,18 +119,18 @@
 			 * 买小鱼
 			 * */
 			buy() {
-				const VALIUSER = service.getUsers();
-				console.log(VALIUSER[0])
-				var that = this;
-				const newData = {
-					account: VALIUSER[0].account,
-					sid: VALIUSER[0].sid,
-					balance: VALIUSER[0].balance-3,//后台互自动增加减少
-					fishNum: VALIUSER[0].fishNum+1,
-					// nickname: VALIUSER[0].nickname,
-				}
-				//TODO
-				service.addUser(newData)
+				// const VALIUSER = service.getUsers();
+				// console.log(VALIUSER[0])
+				// var that = this;
+				// const newData = {
+				// 	account: VALIUSER[0].account,
+				// 	sid: VALIUSER[0].sid,
+				// 	balance: VALIUSER[0].balance-3,//后台互自动增加减少
+				// 	fishNum: VALIUSER[0].fishNum+1,
+				// 	// nickname: VALIUSER[0].nickname,
+				// }
+				// //TODO
+				// service.addUser(newData)
 				uniRequest.post(BASE_URL + "index/index/buy", DATA).then(function(response) {
 					if (response.status === 200 && response.data.code === 200) {
 						that.fishsum++;
