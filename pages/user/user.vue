@@ -15,7 +15,7 @@
 				<p>{{myFish(fishsum)}}</p>
 			</view>
 			<button type="" @click="sell(1)" class="sell">卖小鱼</button>
-			<button type="" @click="bug(1)" class="bug">买小鱼</button>
+			<button type="" @click="buy(1)" class="buy">买小鱼</button>
 		</view>
 		
 		<view class="center_menu">
@@ -33,12 +33,20 @@
 </template>
 
 <script>
+	
 	import {
 		mapState,
 		mapMutations
 	} from 'vuex'
 	import fish from "@/components/xiaodiu-fish-h5/xiaodiu-fish.vue"
 	import fishWx from "@/components/xiaodiu-fish-wx/xiaodiu-fish.vue"
+	import uniRequest from 'uni-request';
+	import service from '../../service.js';
+	const BASE_URL = 'http://www.lexicon.com/';
+	const validUser = service.getUsers();
+	const data = {
+		sid: validUser[0].s_id
+	}
 	export default {
 		data () {
 		   return {
@@ -67,6 +75,9 @@
 			...mapState(['hasLogin', 'forcedLogin','userName']),
 		},
 		components: {fish,fishWx},
+		created() {
+			this.fishsum = validUser[0].fishNum > 0 ? validUser[0].fishNum : 0;
+		},
 		methods: {
 			...mapMutations(['logout']),
 			bindLogin() {
@@ -98,14 +109,35 @@
 					});
 				}
 			},
-			bug() {
-				this.fishsum++;
-				// #ifdef MP-WEIXIN
-				 this.$refs.fishWx.addfish(1)
-				 // #endif
-				 // #ifdef H5
-				 this.$refs.fish.addfish(1)
-				 // #endif
+			buy() {
+				var that = this;
+				uniRequest.post(BASE_URL + "index/index/buy", data).then(function(response) {
+					if (response.status === 200 && response.data.code === 200) {
+						that.fishsum++;
+						//TODO
+						service.addUser({fishNum:that.fishsum})
+						// #ifdef MP-WEIXIN
+						that.$refs.fishWx.addfish(1)
+						// #endif
+						// #ifdef H5
+						that.$refs.fish.addfish(1)
+						// #endif
+						
+						
+					} else {
+						uni.showToast({
+							icon: 'none',
+							title: response.data.msg
+						});
+					}
+				}).catch(function(error) {
+				
+					console.log(error);
+				});
+				
+				
+				 
+				 
 			},
 			sell() {
 					
@@ -199,7 +231,7 @@
 		margin-top: 20upx;
 		width: 100%;
 	}
-	.bug {
+	.buy {
 		width: 20%;
 		font-size: 20upx;
 		line-height: 64upx;

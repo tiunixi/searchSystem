@@ -16,6 +16,8 @@ const addUser = function(userInfo) {
 		account: userInfo.account,
 		password: userInfo.password,
 		s_id: userInfo.s_id,
+		balance: userInfo.balance,
+		fishNum: userInfo.fishNum,
 	});
 	uni.setStorageSync(USERS_KEY, JSON.stringify(users));
 }

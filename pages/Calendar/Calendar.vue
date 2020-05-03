@@ -49,15 +49,22 @@
 
 			</view>
 		</view>
-		<view id="myMoney">			
-			<p>签到3天可以获取1￥金币</p>
+		<view id="myMoney">
+			<p>签到3天可以获取￥1金币</p>
 			<p>集齐3枚，可以买小鱼哦</p><br>
-			<p class="money">现有金币：10￥</p>
+			<p class="money">现有金币：￥{{balance}}</p>
 		</view>
 	</view>
 </template>
 
 <script>
+	import uniRequest from 'uni-request';
+	import service from '../../service.js';
+	const BASE_URL = 'http://www.lexicon.com/';
+	const validUser = service.getUsers();
+	const data = {
+		sid: validUser[0].s_id
+	}
 	export default {
 		data() {
 			return {
@@ -84,7 +91,7 @@
 			dataSource: { //已签到的数据源
 				type: Array,
 				default: () => {
-					return ["2020-04-14", "2019-10-08", "2019-10-09", "2019-10-13"]
+					return []
 				}
 			},
 			langType: { //只是示例一个翻译而已，要想所有都翻译自己可以再加加
@@ -100,9 +107,26 @@
 			this.calculateEmptyGrids(this.cur_year, this.cur_month);
 			this.calculateDays(this.cur_year, this.cur_month);
 			this.onJudgeSign();
+			this.balance = validUser[0].balance;
+
 		},
 		watch: {
 			dataSource: 'onResChange',
+		},
+		onLoad() {
+			//<获取签到日期记录>
+
+			uniRequest.post(BASE_URL + "index/index/signLog", data).then(function(response) {
+				if (response.status === 200 && response.data.code === 200) {
+					console.log(response.data.data);
+				} else {
+					console.log('获取信息失败')
+				}
+			}).catch(function(error) {
+
+				console.log(error);
+			});
+			//<获取签到日期记录/>
 		},
 		methods: {
 			// 获取当月共多少天
@@ -131,7 +155,6 @@
 
 			// 绘制当月天数占的格子，并把它放到days数组中
 			calculateDays(year, month) {
-
 				const thisMonthDays = this.getThisMonthDays(year, month);
 				// this.columnsLen=Math.ceil(thisMonthDays/7);
 				// console.log(this.columnsLen);
@@ -198,44 +221,46 @@
 				this.cur_month = newMonth;
 
 				this.SignUp = []; //先清空
-				this.$emit('dateChange', this.cur_year+"-"+this.cur_month); //传给调用模板页面去拿新数据				
+				this.$emit('dateChange', this.cur_year + "-" + this.cur_month); //传给调用模板页面去拿新数据				
 			},
 
 			clickSignUp(date, type) { //0补签，1当日签到		
 				//this.$http.postHttp("Comment/UpdateRecord", "", (res) => {//可以通过后台接口添加当前用户当日打卡记录，
 				//console.log(res);
 				//if (res!= undefined) {
-
-
 				var str = "签到";
-				if (type == 0) {
-					str = "补签";
+				if (type !== 0) {
+					uniRequest.post(BASE_URL + "index/index/sign", data).then(function(response) {
+						if (response.status === 200 && response.data.code === 200) {
+							uni.showToast({
+								title: "签到成功",
+								icon: 'success',
+								duration: 2000
+							});
+						} else {
+							uni.showToast({
+								icon: 'none',
+								title: response.data.msg
+							});
+						}
+					}).catch(function(error) {
+						console.log(error);
+					});
 				}
-				uni.showToast({
-					title: str + "成功" + date + "号",
-					icon: 'success',
-					duration: 2000
-				});
+				
 				this.SignUp.push(this.cur_year + "-" + this.cur_month + "-" + date); //自动加假数据，写了接口就不用了
 
 				this.$emit('clickChange', this.cur_year + "-" + this.cur_month + "-" + date); //传给调用模板页面
-
-
 				//refresh
 				this.onJudgeSign();
-
 				//}
 				// })
-
-
 			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
-
-
 	.all {
 		margin-top: 18rpx;
 	}
@@ -265,6 +290,7 @@
 		border-radius: 10px;
 		background-color: #fff;
 	}
+
 	.myDateTable {
 		margin: 2.5vw;
 		padding: 2vw;
@@ -272,22 +298,23 @@
 		/* background: linear-gradient(#ff9b0e, #ff8f79); */
 		background: linear-gradient(#33c9ff, #b7e4ff);
 	}
+
 	.myDateTable .dateCell {
-			width: 11vw;
-			padding: 1vw;
-			display: inline-block;
-			text-align: center;
-			font-size: 16px;
-		}
+		width: 11vw;
+		padding: 1vw;
+		display: inline-block;
+		text-align: center;
+		font-size: 16px;
+	}
 
 	.dateCell .cell {
-			display: flex;
-			border-radius: 50%;
-			height: 11vw;
-			justify-content: center;
-			align-items: center;
-		}
-	
+		display: flex;
+		border-radius: 50%;
+		height: 11vw;
+		justify-content: center;
+		align-items: center;
+	}
+
 
 	.whiteColor {
 		color: #fff;
@@ -314,15 +341,18 @@
 	.redColor {
 		color: #ff6666;
 	}
-	#myMoney{
+
+	#myMoney {
 		width: 90%;
 		margin: 10upx auto;
 		text-align: center;
-		p{
+
+		p {
 			text-align: center;
 			display: inline-block;
 		}
-		.money{
+
+		.money {
 			margin-top: 30upx;
 		}
 	}
