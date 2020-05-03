@@ -36,7 +36,7 @@
 										{{ item.key }}
 									</view>
 									<view class="right in_b">
-										<image src="../../static/img/eye.png" ></image>
+										<image src="../../static/img/eye.png"></image>
 										{{ item.clickNum }}
 									</view>
 									<view class="clear"></view>
@@ -66,18 +66,24 @@
 		data() {
 			return {
 				items: ['本站', '中国网站', '外国网站'],
-				menu: [
-					
-				],
+				menu: [],
 				current: 0,
 			}
 		},
 		onShow() {
+			console.log(1)
 			var that = this;
 			uniRequest.post(BASE_URL + "index/index/index", data).then(function(response) {
+				console.log(response)
 				if (response.status === 200 && response.data.code === 200) {
-					that.items = response.data.data.items
-					that.menu = response.data.data.menu
+
+					that.menu = [
+						response.data.data.all,
+						response.data.data.en,
+						response.data.data.zh
+					]
+					console.log(that.menu)
+
 				} else {
 					uni.showToast({
 						icon: 'none',
@@ -237,7 +243,7 @@
 					justify-content: center;
 				}
 			}
-			
+
 		}
 	}
 
@@ -275,27 +281,31 @@
 				clear: both;
 				margin-bottom: 20upx;
 			}
-			.word_card{
+
+			.word_card {
 				height: 35px;
 				line-height: 35px;
+
 				// overflow: hidden;
 				uni-image {
-				    width: 40upx; 
-				    height: 40upx;
-				    display: inline-block;
-				    overflow: hidden;
-				    position: relative;
+					width: 40upx;
+					height: 40upx;
+					display: inline-block;
+					overflow: hidden;
+					position: relative;
 					padding-right: 10upx;
 					line-height: 40upx;
 				}
-				
-				uni-image>div, uni-image>img {
-				    width: 100%;
-				    height: 100%;
-					margin-top:3px;
+
+				uni-image>div,
+				uni-image>img {
+					width: 100%;
+					height: 100%;
+					margin-top: 3px;
 				}
 			}
-			.right——img{
+
+			.right——img {
 				width: 30upx;
 				height: 30upx;
 			}
