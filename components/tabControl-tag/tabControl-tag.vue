@@ -171,7 +171,7 @@
 
 <style lang="less" scoped>
 	.fxied{
-		position: fixed;
+		position: absolute;
 		z-index: 2;
 	}
 	.tabList{

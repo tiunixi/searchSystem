@@ -64,7 +64,7 @@
 		}
 	}
 </script>
-<style>
+<style scoped lang="less">
 	page,
 	.content{
 		width: 100%;

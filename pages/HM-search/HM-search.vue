@@ -4,25 +4,28 @@
 			<!-- mSearch组件 如果使用原样式，删除组件元素-->
 			<mSearch class="mSearch-input-box" :mode="2" button="inside" :placeholder="defaultKeyword" @search="doSearch(false)" @input="inputChange" @confirm="doSearch(false)" v-model="keyword"></mSearch>
 			<!-- 原样式 如果使用原样式，恢复下方注销代码 -->
-			<!-- 			
+			<!-- 						
 			<view class="input-box">
-				<input type="text" :placeholder="defaultKeyword" @input="inputChange" v-model="keyword" @confirm="doSearch(false)"
+				<input type="text" :adjust-position="true" :placeholder="defaultKeyword" @input="inputChange" v-model="keyword" @confirm="doSearch(false)"
 				 placeholder-class="placeholder-class" confirm-type="search">
 			</view>
 			<view class="search-btn" @tap="doSearch(false)">搜索</view> 
-			-->
+			 -->
 			<!-- 原样式 end -->
 		</view>
-		<view class="search-keyword" @touchstart="blur">
+		<view class="search-keyword" >
 			<scroll-view class="keyword-list-box" v-show="isShowKeywordList" scroll-y>
-				<view class="keyword-entry" hover-class="keyword-entry-tap" v-for="row in keywordList" :key="row.keyword">
-					<view class="keyword-text" @tap="doSearch(row.keyword)">
-						<rich-text :nodes="row.htmlStr"></rich-text>
+				<block v-for="(row,index) in keywordList" :key="index">
+					<view class="keyword-entry" hover-class="keyword-entry-tap" >
+						<view class="keyword-text" @tap.stop="doSearch(keywordList[index].keyword)">
+							<rich-text :nodes="row.htmlStr"></rich-text>
+						</view>
+						<view class="keyword-img" @tap.stop="setKeyword(keywordList[index].keyword)">
+							<image src="/static/HM-search/back.png"></image>
+						</view>
 					</view>
-					<view class="keyword-img" @tap="setkeyword(row)">
-						<image src="/static/HM-search/back.png"></image>
-					</view>
-				</view>
+				</block>
+				
 			</scroll-view>
 			<scroll-view class="keyword-box" v-show="!isShowKeywordList" scroll-y>
 				<view class="keyword-block" v-if="oldKeywordList.length>0">
@@ -121,7 +124,9 @@
 				uni.request({
 					url: 'https://suggest.taobao.com/sug?code=utf-8&q=' + keyword, //仅为示例
 					success: (res) => {
+						this.keywordList = [];
 						this.keywordList = this.drawCorrelativeKeyword(res.data.result, keyword);
+						
 					}
 				});
 			},
@@ -143,8 +148,8 @@
 				return keywordArr;
 			},
 			//顶置关键字
-			setkeyword(data) {
-				this.keyword = data.keyword;
+			setKeyword(index) {
+				this.keyword = this.keywordList[index].keyword;
 			},
 			//清除历史搜索
 			oldDelete() {
@@ -168,29 +173,30 @@
 				this.forbid = this.forbid ? '' : '_forbid';
 			},
 			//执行搜索
-			doSearch(key) {
-				key = key ? key : this.keyword ? this.keyword : this.defaultKeyword;
-				this.keyword = key;
-				this.saveKeyword(key); //保存为历史 
+			doSearch(keyword) {
+				keyword = keyword===false?this.keyword:keyword;
+				this.keyword = keyword;
+				this.saveKeyword(keyword); //保存为历史 
 				uni.showToast({
-					title: key,
+					title: keyword,
 					icon: 'none',
 					duration: 2000
 				});
 				//以下是示例跳转淘宝搜索，可自己实现搜索逻辑
+				/*
 				//#ifdef APP-PLUS
-				plus.runtime.openURL(encodeURI('taobao://s.taobao.com/search?q=' + key));
+				plus.runtime.openURL(encodeURI('taobao://s.taobao.com/search?q=' + keyword));
 				//#endif
 				//#ifdef H5
-				window.location.href = 'taobao://s.taobao.com/search?q=' + key
+				window.location.href = 'taobao://s.taobao.com/search?q=' + keyword
 				//#endif
+				*/
 			},
 			//保存关键字到历史记录
 			saveKeyword(keyword) {
 				uni.getStorage({
 					key: 'OldKeys',
 					success: (res) => {
-						console.log(res.data);
 						var OldKeys = JSON.parse(res.data);
 						var findIndex = OldKeys.indexOf(keyword);
 						if (findIndex == -1) {
@@ -220,9 +226,9 @@
 		}
 	}
 </script>
-<style>
+<style scoped lang="less">
 	view{display:block;}
-	.search-box {width:95%;background-color:rgb(242,242,242);padding:15upx 2.5%;display:flex;justify-content:space-between;}
+	.search-box {width:95%;background-color:rgb(242,242,242);padding:15upx 2.5%;display:flex;justify-content:space-between;position:sticky;top: 0;}
 	.search-box .mSearch-input-box{width: 100%;}
 	.search-box .input-box {width:85%;flex-shrink:1;display:flex;justify-content:center;align-items:center;}
 	.search-box .search-btn {width:15%;margin:0 0 0 2%;display:flex;justify-content:center;align-items:center;flex-shrink:0;font-size:28upx;color:#fff;background:linear-gradient(to right,#ff9801,#ff570a);border-radius:60upx;}

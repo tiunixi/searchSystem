@@ -19,15 +19,15 @@
 		</view>
 		
 		<view class="center_menu">
-			<view class="menu_item" v-for="item in menus" @tap="menuTap(item.key)">
+			<view class="menu_item" v-for="item in menus" :key="item.key" @tap="menuTap(item.key)">
 				<image :src="item.icon" mode="aspectFill"></image>
 				<text>{{item.name}}</text>
 			</view>
 		</view>
 		
 		<view class="btn-row">
-			<button v-if="!hasLogin" type="primary" class="primary" @tap="bindLogin">登录</button>
-			<button v-if="hasLogin" type="default" class="primary" @tap="bindLogout">退出登录</button>
+			<button v-if="!loginToOut" type="primary" class="primary" @tap="bindLogin">登录</button>
+			<button v-if="loginToOut" type="default" class="primary" @tap="bindLogout">退出登录</button>
 		</view>
 	</view>
 </template>
@@ -43,6 +43,7 @@
 		data () {
 		   return {
 		    fishsum: 8,
+			loginToOut:true,
 			menus: [{
 						name: '我的收藏',
 						icon: '../../static/fumou-center-template/5.png',
@@ -53,33 +54,17 @@
 						icon: '../../static/fumou-center-template/6.png',
 						key: 2,
 					},
-					// {
-					// 	name: '意见反馈',
-					// 	icon: '../../static/fumou-center-template/7.png',
-					// 	key: 3,
-					// },
-					// {
-					// 	name: '帮助中心',
-					// 	icon: '../../static/fumou-center-template/8.png',
-					// 	key: 4,
-					// },
-					// {
-					// 	name: '意见反馈',
-					// 	icon: '../../static/fumou-center-template/9.png',
-					// 	key: 5,
-					// },
-					// {
-					// 	name: '关于我们',
-					// 	icon: '../../static/fumou-center-template/10.png',
-					// 	key: 6,
-					// }
-			
+					{
+						name: '功能介绍与反馈',
+						icon: '../../static/fumou-center-template/7.png',
+						key: 3,
+					},
 				]
 			
 		   }
 		},
 		computed: {
-			...mapState(['hasLogin', 'forcedLogin'])
+			...mapState(['hasLogin', 'forcedLogin','userName']),
 		},
 		components: {fish,fishWx},
 		methods: {
@@ -89,11 +74,24 @@
 					url: '../login/login',
 				});
 			},
+			
+		
+			/*
+			*退出登录
+			*/
+			
 			bindLogout() {
 				this.logout();
 				/**
 				 * 如果需要强制登录跳转回登录页面
 				 */
+				console.log("success")
+				uni.removeStorage({
+				    key: 'USERS_KEY',
+				    success: function (res) {
+				        console.log('success');
+				    }
+				});
 				if (this.forcedLogin) {
 					uni.reLaunch({
 						url: '../login/login',
@@ -138,17 +136,27 @@
 			}
 			,menuTap(key) {
 				if (key === 1) {
-					uni.reLaunch({
+					uni.navigateTo({
 						url: '../favorite/favorite',
 					});
 				}
 				else if (key === 2) {
-					uni.reLaunch({
+					uni.navigateTo({
 						url: '../Calendar/Calendar',
 					});
 				}
+				else if (key === 3) {
+					uni.navigateTo({
+						url: '../feedback/feedback',
+					});
+				}
 			}
+		},
+		mounted() {
+			console.log(uni.getStorageSync('USERS_KEY'))
+			this.loginToOut = uni.getStorageSync('USERS_KEY').length>0
 		}
+			
 	}
 </script>
 
@@ -156,6 +164,7 @@
 	.user {
 		position: relative;
 		width: 100%;
+		background: #fff;
 		.uni-page-head-btn {
 			display: block !important;
 		}
@@ -196,7 +205,8 @@
 		line-height: 64upx;
 		border-radius: 35upx;
 		border: none;
-		background: #3cb371;
+		background: #ff9700;
+		// background: rgba(252s, 135, 29, 1);
 		color: #fff;
 	}
 	.sell {

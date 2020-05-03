@@ -3,7 +3,7 @@
 		<view class="input-group">
 			<view class="input-row border">
 				<text class="title">账号：</text>
-				<m-input class="m-input" type="text" clearable focus v-model="account" placeholder="请输入账号"></m-input>
+				<m-input class="m-input" type="email" clearable focus v-model="account" placeholder="请输入账号"></m-input>
 			</view>
 			<view class="input-row">
 				<text class="title">密码：</text>
@@ -34,7 +34,8 @@
 		mapMutations
 	} from 'vuex'
 	import mInput from '../../components/m-input.vue'
-
+	import uniRequest from 'uni-request';
+	const BASE_URL = 'http://www.lexicon.com/'
 	export default {
 		components: {
 			mInput
@@ -43,21 +44,21 @@
 			return {
 				providerList: [],
 				hasProvider: false,
-				account: '',
-				password: '',
+				account: 'zepuer@163.com',
+				password: '1',
 				positionTop: 0,
 				isDevtools: false,
 			}
 		},
 		computed: mapState(['forcedLogin']),
 		methods: {
-			...mapMutations(['login','url']),
+			...mapMutations(['login', 'url']),
 			initProvider() {
 				const filters = ['weixin', 'qq', 'sinaweibo'];
 				uni.getProvider({
 					service: 'oauth',
 					success: (res) => {
-						console.log(res)
+					
 						if (res.provider && res.provider.length) {
 							for (let i = 0; i < res.provider.length; i++) {
 								if (~filters.indexOf(res.provider[i])) {
@@ -83,44 +84,89 @@
 				 */
 				this.positionTop = uni.getSystemInfoSync().windowHeight - 100;
 			},
+			
+			/*
+			*登录
+			*/
 			bindLogin() {
+
 				/**
 				 * 客户端对账号信息进行一些必要的校验。
 				 * 实际开发中，根据业务需要进行处理，这里仅做示例。
 				 */
-				if (this.account.length < 5) {
+				var pattern = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
+
+
+				if (!pattern.test(this.account)) {
 					uni.showToast({
 						icon: 'none',
-						title: '账号最短为 5 个字符'
+						title: '请输入正确邮箱'
 					});
 					return;
 				}
-				if (this.password.length < 6) {
-					uni.showToast({
-						icon: 'none',
-						title: '密码最短为 6 个字符'
-					});
-					return;
-				}
+				// if (this.password.length < 6) {
+				// 	uni.showToast({
+				// 		icon: 'none',
+				// 		title: '密码最短为 6 个字符'
+				// 	});
+				// 	return;
+				// }
 				/**
 				 * 下面简单模拟下服务端的处理
 				 * 检测用户账号密码是否在已注册的用户列表中
 				 * 实际开发中，使用 uni.request 将账号信息发送至服务端，客户端在回调函数中获取结果信息。
 				 */
 				const data = {
-					account: this.account,
-					password: this.password
+					// account: this.account,
+					// pwd: this.password
+					account: 'zepuer@163.com',
+					pwd: 1
 				};
-				const validUser = service.getUsers().some(function(user) {
-					return data.account === user.account && data.password === user.password;
-				});
-				if (validUser) {
+				let validUser = service.getUsers();
+
+				
+				if (validUser.length !== 0) {
+					// 存在缓存数据getUsers（）对象
 					this.toMain(this.account);
 				} else {
-					uni.showToast({
-						icon: 'none',
-						title: '用户账号或密码不正确',
-					});
+					// service.toServicelogin(data)
+					//需要重新登录
+				
+					var that = this;
+					uniRequest.post(BASE_URL + "index/index/login", data)
+						.then(function(response) {
+							
+							if (response.status === 200 && response.data.code === 200) {
+								// 登录成功后存入缓存数据addUser 
+								const newData = {
+									account: data.account,
+									pwd: data.pwd,
+									s_id: response.data.data.sid
+								}
+								uni.showToast({
+									icon: 'none',
+									title: '登陆成功',
+									duration: 1000
+								});
+								that.toMain(data.account);
+								service.addUser(newData)
+								uni.reLaunch({
+									url: '../main/main',
+								});
+								// console.log(newData)
+							
+							} else {
+								
+								uni.showToast({
+									icon: 'none',
+									title: '用户账号或密码不正确',
+									duration: 1000
+								});
+							}
+						}).catch(function(error) {
+						
+							console.log(error);
+						});
 				}
 			},
 			oauth(value) {
@@ -178,7 +224,7 @@
 				} else {
 					uni.navigateBack();
 				}
-			
+
 			},
 			toMain(userName) {
 				this.login(userName);
@@ -206,7 +252,7 @@
 	}
 </script>
 
-<style>
+<style scoped lang="less">
 	.action-row {
 		display: flex;
 		flex-direction: row;

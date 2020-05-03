@@ -42,7 +42,7 @@
 			},
 			sliderColor: { //滑块颜色
 				type: String,
-				default: '#ff461f'
+				default: '#ff9700'
 			},
 			textColor: { //字体颜色
 				type: String,

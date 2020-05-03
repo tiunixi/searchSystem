@@ -49,6 +49,11 @@
 
 			</view>
 		</view>
+		<view id="myMoney">			
+			<p>签到3天可以获取1￥金币</p>
+			<p>集齐3枚，可以买小鱼哦</p><br>
+			<p class="money">现有金币：10￥</p>
+		</view>
 	</view>
 </template>
 
@@ -79,7 +84,7 @@
 			dataSource: { //已签到的数据源
 				type: Array,
 				default: () => {
-					return ["2019-10-04", "2019-10-08", "2019-10-09", "2019-10-13"]
+					return ["2020-04-14", "2019-10-08", "2019-10-09", "2019-10-13"]
 				}
 			},
 			langType: { //只是示例一个翻译而已，要想所有都翻译自己可以再加加
@@ -228,11 +233,11 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 
 
 	.all {
-		margin-top: 20rpx;
+		margin-top: 18rpx;
 	}
 
 	.all .bar {
@@ -264,7 +269,8 @@
 		margin: 2.5vw;
 		padding: 2vw;
 		border-radius: 10px;
-		background: linear-gradient(#74AADA, #94db98);
+		/* background: linear-gradient(#ff9b0e, #ff8f79); */
+		background: linear-gradient(#33c9ff, #b7e4ff);
 	}
 	.myDateTable .dateCell {
 			width: 11vw;
@@ -288,12 +294,12 @@
 	}
 
 	.greenColor {
-		color: #01b90b;
+		color: #fff;
 		font-weight: bold;
 	}
 
 	.bgWhite {
-		background-color: #fff;
+		background: #00aeff;
 	}
 
 	.bgGray {
@@ -302,10 +308,22 @@
 
 	.bgBlue {
 		font-size: 14px;
-		background-color: #4b95e6;
+		background-color: #00aeff;
 	}
 
 	.redColor {
 		color: #ff6666;
+	}
+	#myMoney{
+		width: 90%;
+		margin: 10upx auto;
+		text-align: center;
+		p{
+			text-align: center;
+			display: inline-block;
+		}
+		.money{
+			margin-top: 30upx;
+		}
 	}
 </style>

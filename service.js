@@ -1,7 +1,6 @@
 // 管理账号信息
 const USERS_KEY = 'USERS_KEY';
 const STATE_KEY = 'STATE_KEY';
-
 const getUsers = function() {
 	let ret = '';
 	ret = uni.getStorageSync(USERS_KEY);
@@ -15,7 +14,8 @@ const addUser = function(userInfo) {
 	let users = getUsers();
 	users.push({
 		account: userInfo.account,
-		password: userInfo.password
+		password: userInfo.password,
+		s_id: userInfo.s_id,
 	});
 	uni.setStorageSync(USERS_KEY, JSON.stringify(users));
 }

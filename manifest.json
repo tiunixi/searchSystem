@@ -69,15 +69,19 @@
 	
     "h5": {
         "devServer": {
+            "port": 8000, 
+            "disableHostCheck": true, 
 			"proxy": {
 				"/api": {                    
-					"target":"http://www.luominus.com",
+					"target":"localhost",
 					"changeOrigin": true,//是否跨域
 					"secure": false,// 设置支持https协议的代理
-					 "pathRewrite":{"^/api":"/"}
+					"ws": true, 
+					"pathRewrite":{"^/api":""}
 					// "pathRewrite":{"^/dpc":""}
 				}
 			}
 		}
 	}
 }
+

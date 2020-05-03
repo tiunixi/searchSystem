@@ -13,7 +13,7 @@
 				<view class="left">
 					<text class="title">金融名词检索服务</text>
 					<text class="sub_title">读懂名词，轻松备考面试</text>
-					<text class="btn" @tap="searchPage()">功能介绍</text>
+					<text class="btn" @tap="searchPage()">功能介绍与反馈</text>
 				</view>
 				<view>
 					<image src="/static/right.png" style="width: 131px;height: 122px;"></image>
@@ -22,21 +22,27 @@
 		</view>
 		<view class="page_content">
 			<view class="menu">
-				{{menus}}
-				<!-- <template v-for="(it,i) in menus">
-					<view class="item" :key="'menu_'+i">
-						<view class="img_view" :style="{background: it.bg}">
-							<image :src="it.icon" class="image"></image>
-						</view>
-						<text class="txt">{{it.txt}}</text>
-					</view>
-				</template> -->
 				<tabControl :current="current" :values="items" bgc="#fff" :fixed="true" :scrollFlag='true' :isEqually='true' @clickItem="onClickItem" ></tabControl>
 				<!-- 使用 swiper 配合 滑动切换 -->
 				<swiper class="swiper" style="height: 100%;width: 100%;" @change='scollSwiper' :current='current'>
-					<swiper-item v-for="(item,index) in items" :key='index'>
+					<swiper-item v-for="(items,index) in menu" :key='index'>
 						<!-- 使用 scroll-view 来滚动内容区域 -->
-						<scroll-view scroll-y="true" style="height: 100%;">{{ item }}</scroll-view>
+						<!-- {{menu}} -->
+						<scroll-view scroll-y="true" style="height: 100%;width: 100%;">
+							<view class="menu_item" v-for="(item,index) in items" :key='index'>
+								<view class="word_card" @tap="toWordPage(item.id)">
+									<view class="left in_b">
+										词汇：{{ item.word }}
+									</view>
+									<view class="right in_b">
+										浏览量：{{ item.AllPageView }}
+									</view>
+									<view class="clear">
+										
+									</view>
+								</view>
+							</view>
+						</scroll-view>
 					</swiper-item>
 				</swiper>
 			</view>
@@ -46,70 +52,32 @@
 
 <script>
 	import tabControl from '@/components/tabControl-tag/tabControl-tag.vue';
-	 const BASE_URL = 'http://www.luominus.com/';
+	 const BASE_URL = 'http://www.lexicon.com/';
 	 import uniRequest from 'uni-request';
 	export default {
 		components:{tabControl},
 		data() {
 			return {
-				items: ['网站1', '网站2', '网站3'],
-				menus:{
-					all_income:0,
-					status: 1,
-					limit: 0,
-					today_order_num: 0,
-					today_success_order_num: 0,
-					today_price: 0,
-					today_success_price: 0,
-					today_income: 0,
-					todo_price: 0,
-				},
+				items: ['本站', '中国网站', '外国网站'],
+				menu: [
+					[{word:'1',AllPageView:'122',id:1},
+					{word:'1',AllPageView:'122',id:2},
+					{word:'1',AllPageView:'122',id:3},
+					{word:'1',AllPageView:'122',id:4},
+					{word:'1',AllPageView:'122',id:5},
+					{word:'1',AllPageView:'122',id:6},
+					{word:'1',AllPageView:'122',id:7},
+					{word:'1',AllPageView:'122',id:8},
+				], 
+					[{word:'2',AllPageView:'222',id:9},
+					{word:'2',AllPageView:'222',id:10},
+					{word:'2',AllPageView:'222',id:11},
+				], 
+					[{word:'3',AllPageView:'322',id:12},
+					{word:'3',AllPageView:'322',id:13},
+					{word:'3',AllPageView:'322',id:14},
+					]],
 				current: 0,
-				second_menus: [{
-						icon: '/static/exam.png',
-						txt: '考试教案'
-					},
-					{
-						icon: '/static/textbook.png',
-						txt: '教材教案',
-					},
-					{
-						icon: '/static/book_ticket.png',
-						txt: '青书券'
-					},
-					{
-						icon: '/static/more.png',
-						txt: '全部课程'
-					}
-				],
-				records: [{
-						bg: 'linear-gradient(-30deg,rgba(171,218,255,1),rgba(215,239,255,1))',
-						title: '教师考情分析',
-						mainTeacher: '小A',
-						subTitle: '标题名称',
-						subColor: '#15639F',
-						icon: '/static/test2.png',
-						isFree: true
-					},
-					{
-						bg: 'linear-gradient(-30deg,rgba(192,253,227,1),rgba(224,252,240,1))',
-						title: '查看详情',
-						mainTeacher: '小B',
-						subTitle: '标题名称',
-						subColor: '#07B77B',
-						icon: '/static/test.png',
-						isFree: false
-					},
-					{
-						bg: 'linear-gradient(-30deg,rgba(171,218,255,1),rgba(215,239,255,1))',
-						title: '教师考情分析',
-						mainTeacher: '小A',
-						subTitle: '标题名称',
-						subColor: '#15639F',
-						icon: '/static/test2.png',
-						isFree: true
-					}
-				]
 			}
 		},
 		onShow() {
@@ -117,41 +85,41 @@
 				token: 'hy3fB7yKi8dWZtgCyrJYRA=='
 			}
 			var  that = this
-			uni.request({
-				url:BASE_URL + "api/v1/Index/indexData",  
-				data: newData,  
-				method:'GET',  
-				dataType:'json',  
-				header:{  
-					'content-type':'application/json'  
-				},
-				success(e){  
-					console.log(e) 
-					 if (e.statusCode === 200) {
-					 	if (e.data.code === 200) {
-					 		var myData = e.data.data
-					 		that.menus = {
-					 			all_income: myData.all_income,
-					 			status: myData.status,
-					 			limit: myData.limit,
-					 			today_order_num: myData.today_order_num,
-					 			today_success_order_num: myData.today_success_order_num,
-					 			today_price: myData.today_price,
-					 			today_success_price: myData.today_success_price,
-					 			today_income: myData.today_income,
-					 			todo_price: myData.todo_price,
-					 		}
-					 	}
-					 }
-				},  
-			})
-			console.log(this.menus)
-			console.log(that.menus)
-		},
+			
+			// uni.request({
+			// 		url:BASE_URL + "api/v1/Index/indexData",  
+			// 		data: newData,  
+			// 		method:'GET',  
+			// 		dataType:'json',  
+			// 		header:{  
+			// 			'content-type':'application/json'  
+			// 		},
+			// 		success(e){  
+			// 			console.log(e) 
+			// 			 if (e.statusCode === 200) {
+			// 			 	if (e.data.code === 200) {
+			// 			 		var myData = e.data.data
+			// 			 		that.menus = {
+			// 			 			all_income: myData.all_income,
+			// 			 			status: myData.status,
+			// 			 			limit: myData.limit,
+			// 			 			today_order_num: myData.today_order_num,
+			// 			 			today_success_order_num: myData.today_success_order_num,
+			// 			 			today_price: myData.today_price,
+			// 			 			today_success_price: myData.today_success_price,
+			// 			 			today_income: myData.today_income,
+			// 			 			todo_price: myData.todo_price,
+			// 			 		}
+			// 			 	}
+			// 			 }
+			// 		},  
+			// 	})
+			
+			},
 		methods: {
 			searchPage() {
 				uni.navigateTo({
-					url: '../searchPage/searchPage',
+					url: '../feedback/feedback',
 				});
 			},
 			HMSEarch() {
@@ -172,12 +140,17 @@
 			},
 			scollSwiper(e){
 				this.current = e.target.current
-			}
+			},
+			toWordPage(id) {
+				uni.navigateTo({
+					url: '../myPage/myPage?id='+id,
+				});
+			},
 		}
 	}
 </script>
 
-<style>
+<style scoped lang="less">
 	page {
 		width: 100%;
 		background-color: #ebebeb;
@@ -187,7 +160,9 @@
 	@function realSize($args) {
 		@return $args / 1.5;
 	}
-
+	.in_b{
+		display: inline-block;
+	}
 	.page_edu {
 		width: 100%;
 	}
@@ -275,7 +250,7 @@
 					margin-top: 3px;
 					width: realSize(198px);
 					height: realSize(60px);
-					background: linear-gradient(-30deg, rgba(252, 135, 29, 1), rgba(246, 185, 9, 1));
+					background: linear-gradient(-30deg, rgba(255, 88, 96, 1), rgba(255, 151, 0, 1));
 					box-shadow: 0px 4px 10px 0px rgba(255, 121, 0, 0.5);
 					border-radius: realSize(30px);
 					color: rgba(255, 255, 255, 1);
@@ -296,7 +271,7 @@
 			margin-right: 10px;
 			padding-left: 10px;
 			padding-right: 10px;
-			height: realSize(176px);
+			height: realSize(576px);
 			background: rgba(255, 255, 255, 1);
 			box-shadow: 0px 10px 10px 0px rgba(0, 161, 124, 0.1);
 			border-radius: 10px;
@@ -304,175 +279,17 @@
 			flex-direction: row;
 			align-items: stretch;
 			justify-content: space-between;
-
-			.item {
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				justify-content: center;
-
-				.img_view {
-					width: 60px;
-					height: 60px;
-					border-radius: 30px;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-
-					.image {
-						width: 50px;
-						height: 50px;
-					}
-				}
-
-				.txt {
-					margin-top: 5px;
-					font-size: 14px;
-					color: rgba(51, 51, 51, 1);
-				}
+			.left{
+				float: left;
 			}
-		}
-
-		.s_menu {
-			display: flex;
-			flex-direction: row;
-			align-items: stretch;
-			justify-content: space-between;
-			margin-top: 15px;
-			margin-left: 10px;
-			margin-right: 10px;
-			padding-left: 10px;
-			padding-right: 10px;
-
-			.item {
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				justify-content: center;
-
-				.image {
-					width: 35px;
-					height: 35px;
-				}
-
-				.txt {
-					margin-top: 5px;
-					font-size: 14px;
-					color: rgba(51, 51, 51, 1);
-				}
+			.right{
+				float: right;
 			}
-		}
-
-		.ad {
-			width: 100%;
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			justify-content: center;
-
-			.bg {
-				position: absolute;
-				width: 120px;
-				height: 105px;
-				left: 0;
-			}
-
-			.ad_btn {
-				width: 100%;
-				height: 63px;
-				margin: 30px;
-				background: linear-gradient(0deg, rgba(253, 155, 28, 1), rgba(251, 197, 33, 1));
-				border-radius: 67px;
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				justify-content: center;
-
-				.title {
-					font-size: realSize(38px);
-					font-family: PingFang-SC-Heavy;
-					font-weight: 800;
-					color: rgba(255, 255, 255, 1);
-				}
-
-				.sub_title {
-					background: linear-gradient(0deg, rgba(255, 128, 37, 1), rgba(255, 153, 32, 1));
-					box-shadow: 0px 4px 5px 0px rgba(92, 53, 48, 0.3), 0px 1px 0px 0px rgba(228, 228, 228, 1);
-					border-radius: realSize(24px);
-					font-size: realSize(24px);
-					font-family: PingFang-SC-Heavy;
-					font-weight: 800;
-					font-style: italic;
-					color: rgba(255, 236, 177, 1);
-					line-height: realSize(26px);
-				}
+			.clear{
+				clear: both;
+				margin-bottom: 20upx;
 			}
 		}
 	}
 
-	.slider {
-		white-space: nowrap;
-		width: 100%;
-		background-color: white;
-
-		.item {
-			display: inline-block;
-			margin-left: 15px;
-			margin-top: 13px;
-			margin-bottom: 13px;
-			width: 60%;
-			height: 125px;
-			border-radius: 10px;
-
-			.item_content {
-				display: flex;
-				flex-direction: row;
-
-				.title {
-					width: 36%;
-					margin: 20px;
-					display: flex;
-					flex-direction: column;
-					
-					.first {
-						font-size: 16px;
-						color:rgba(46,65,69,1);
-					}
-					.main {
-						font-size: 13px;
-						color:rgba(79,103,101,1);
-						margin-top: 5px;
-					}
-					.sub {
-						width: 60px;
-						font-size: 10px;
-						margin-top: 20px;
-						background:rgba(255,255,255,0.4);
-						border-radius:5px;
-						display: flex;
-						align-items: center;
-						justify-content: center;
-					}
-				}
-
-				.image {
-					margin-top: 35px;
-					width: 80px;
-					height: 80px;
-				}
-
-				.free {
-					background: rgba(11, 147, 252, 1);
-					border-radius: 0px 0px 22px 22px;
-					width: 25px;
-					height: 50px;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					color: #FFFFFF;
-					font-size: 14px;
-				}
-			}
-		}
-	}
 </style>

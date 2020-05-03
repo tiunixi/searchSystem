@@ -2,7 +2,7 @@
 	<view class="serach">
 		<view class="content" :style="{'border-radius':radius+'px'}">
 			<!-- HM修改 增加进入输入状态的点击范围 -->
-			<view class="content-box" :class="{'center':mode === 2}" @click="getFocus">
+			<view class="content-box" :class="{'center':mode === 2}" >
 				<text class="icon icon-serach"></text>
 				<!-- HM修改 增加placeholder input confirm-type confirm-->
 				<input  :placeholder="placeholder" @input="inputChange" confirm-type="search" @confirm="triggerConfirm" class="input" :class="{'center':!active && mode === 2}" :focus="isFocus" v-model="inputVal" @focus="focus" @blur="blur"/>
@@ -10,9 +10,9 @@
 				<!-- HM修改 @click换成@click.stop阻止冒泡 -->
 				<text v-if="isDelShow" class="icon icon-del"  @click.stop="clear"></text>
 			</view>
-			<view v-show="(active&&show&&button === 'inside')||(isDelShow && button === 'inside')" class="serachBtn" @click="search">
+			<!-- <view v-show="(active&&show&&button === 'inside')||(isDelShow && button === 'inside')" class="serachBtn" @click="search">
 				搜索
-			</view>
+			</view> -->
 		</view>
 		<view  v-if="button === 'outside'" class="button" :class="{'active':show||active}" @click="search">
 			<view class="button-item">{{!show?searchName:'搜索'}}</view>
@@ -55,7 +55,7 @@ export default {
 			inputVal: '',
 			searchName: '取消',
 			isDelShow: false,
-			isFocus: false
+			isFocus: true
 		};
 	},
 	methods: {
@@ -79,6 +79,7 @@ export default {
 			}
 		},
 		blur() {
+			console.log('blur');
 			this.isFocus = false;
 			if (!this.inputVal) {
 				this.active = false;
@@ -96,7 +97,10 @@ export default {
 			
 		},
 		getFocus() {
-			this.isFocus = true;
+			if(!this.isFocus){
+				this.isFocus = true;
+			}
+			
 		},
 		search() {
 			//HM修改 增加点击取消时候退出输入状态，内容为空时，输入默认关键字

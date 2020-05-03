@@ -48,6 +48,6 @@
 	}
 </script>
 
-<style>
+<style scoped lang="less">
 
 </style>
