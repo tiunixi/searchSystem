@@ -247,7 +247,7 @@
 						console.log(error);
 					});
 				}
-				
+
 				this.SignUp.push(this.cur_year + "-" + this.cur_month + "-" + date); //自动加假数据，写了接口就不用了
 
 				this.$emit('clickChange', this.cur_year + "-" + this.cur_month + "-" + date); //传给调用模板页面
