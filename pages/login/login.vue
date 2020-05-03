@@ -141,7 +141,10 @@
 								const newData = {
 									account: data.account,
 									pwd: data.pwd,
-									s_id: response.data.data.sid
+									sid: response.data.data.sid,
+									balance: response.data.data.balance,
+									fishNum: response.data.data.fishNum,
+									nickname: response.data.data.nickname,
 								}
 								uni.showToast({
 									icon: 'none',
@@ -153,7 +156,7 @@
 								uni.reLaunch({
 									url: '../main/main',
 								});
-								// console.log(newData)
+								console.log(newData)
 							
 							} else {
 								

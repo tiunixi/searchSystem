@@ -11,13 +11,17 @@ const getUsers = function() {
 }
 
 const addUser = function(userInfo) {
-	let users = getUsers();
-	users.push({
+	// let users = getUsers();
+	let users = []
+	console.log('users',userInfo)
+	// users.pop()
+	users.unshift({
 		account: userInfo.account,
 		password: userInfo.password,
-		s_id: userInfo.s_id,
+		sid: userInfo.sid,
 		balance: userInfo.balance,
 		fishNum: userInfo.fishNum,
+		nickname: userInfo.nickname
 	});
 	uni.setStorageSync(USERS_KEY, JSON.stringify(users));
 }

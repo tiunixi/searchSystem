@@ -11,11 +11,15 @@
 		<!-- <view class="fish-button" v-if="hasLogin"> -->
 		<view class="fish-button">
 			<view class="my-fish">
+				<p>我的金币</p>
+				<p>{{myFish(balance)}}</p>
+			</view>
+			<!-- <button type="" @click="sell(1)" class="sell">卖小鱼</button> -->
+			<button type="" @click="buy(1)" class="buy">买小鱼</button>
+			<view class="my-fish">
 				<p>我的小鱼</p>
 				<p>{{myFish(fishsum)}}</p>
 			</view>
-			<button type="" @click="sell(1)" class="sell">卖小鱼</button>
-			<button type="" @click="buy(1)" class="buy">买小鱼</button>
 		</view>
 		
 		<view class="center_menu">
@@ -43,14 +47,15 @@
 	import uniRequest from 'uni-request';
 	import service from '../../service.js';
 	const BASE_URL = 'http://www.lexicon.com/';
-	const validUser = service.getUsers();
-	const data = {
-		sid: validUser[0].s_id
+	const VALIUSER = service.getUsers();
+	const DATA = {
+		sid: VALIUSER[0].s_id?VALIUSER[0].s_id:0
 	}
 	export default {
 		data () {
 		   return {
-		    fishsum: 8,
+		    fishsum: VALIUSER[0].fishNum,
+			balance:VALIUSER[0].balance,
 			loginToOut:true,
 			menus: [{
 						name: '我的收藏',
@@ -76,23 +81,24 @@
 		},
 		components: {fish,fishWx},
 		created() {
-			this.fishsum = validUser[0].fishNum > 0 ? validUser[0].fishNum : 0;
+			// this.fishsum = VALIUSER[0].fishNum > 0 ? VALIUSER[0].fishNum : 0;
 		},
 		methods: {
 			...mapMutations(['logout']),
+			/*
+			*登录
+			*/
 			bindLogin() {
 				uni.navigateTo({
 					url: '../login/login',
 				});
 			},
-			
-		
 			/*
 			*退出登录
 			*/
-			
 			bindLogout() {
 				this.logout();
+				this.loginToOut = false
 				/**
 				 * 如果需要强制登录跳转回登录页面
 				 */
@@ -109,13 +115,35 @@
 					});
 				}
 			},
+			/**
+			 * 买小鱼
+			 * */
 			buy() {
+				const VALIUSER = service.getUsers();
+				console.log(VALIUSER[0])
 				var that = this;
-				uniRequest.post(BASE_URL + "index/index/buy", data).then(function(response) {
+				const newData = {
+					account: VALIUSER[0].account,
+					sid: VALIUSER[0].sid,
+					balance: VALIUSER[0].balance-3,//后台互自动增加减少
+					fishNum: VALIUSER[0].fishNum+1,
+					// nickname: VALIUSER[0].nickname,
+				}
+				//TODO
+				service.addUser(newData)
+				uniRequest.post(BASE_URL + "index/index/buy", DATA).then(function(response) {
 					if (response.status === 200 && response.data.code === 200) {
 						that.fishsum++;
+						const newData = {
+							account: VALIUSER[0].account,
+							pwd: VALIUSER[0].pwd,
+							s_id: VALIUSER[0].sid,
+							balance: VALIUSER[0].balance-3,//后台互自动增加减少
+							fishNum: VALIUSER[0].fishNum++,
+							nickname: VALIUSER[0].nickname,
+						}
 						//TODO
-						service.addUser({fishNum:that.fishsum})
+						service.addUser(newData)
 						// #ifdef MP-WEIXIN
 						that.$refs.fishWx.addfish(1)
 						// #endif
@@ -134,9 +162,6 @@
 				
 					console.log(error);
 				});
-				
-				
-				 
 				 
 			},
 			sell() {
@@ -165,8 +190,11 @@
 				// #ifdef H5
 					return fishsum
 				// #endif
-			}
-			,menuTap(key) {
+			},
+			/**
+			 * 跳转页面 由传入的key控制
+			 * */
+			menuTap(key) {
 				if (key === 1) {
 					uni.navigateTo({
 						url: '../favorite/favorite',
