@@ -7,12 +7,13 @@
 					<view class="left in_b">
 						词汇：{{ items.word }}
 					</view>
+					
 					<view class="right in_b">
-						浏览量：{{ items.AllPageView }}
+						<image src="../../static/img/collect.png"></image>
+						<image src="../../static/img/eye.png"></image>
+						{{ items.AllPageView }}
 					</view>
-					<view class="clear">
-						
-					</view>
+					<view class="clear"></view>
 				</view>
 			</view>
 		</view>
@@ -76,31 +77,64 @@
 		width: 100%;
 		// margin-top: -74px;
 		.menu {
-			margin-left: 10px;
-			margin-right: 10px;
-			margin: 30upx 10px;
-			padding: 30upx 20upx;
-			// height: realSize(576px);
-			padding: 20upx 30upx ;
-			height: realSize(576px);
-			background: rgba(255, 255, 255, 1);
-			box-shadow: 0px 10px 10px 0px rgba(0, 161, 124, 0.1);
-			border-radius: 10px;
-			// display: flex;
-			flex-direction: row;
-			align-items: stretch;
-			justify-content: space-between;
-			.left{
-				float: left;
-			}
-			.right{
-				float: right;
-			}
-			.clear{
-				clear: both;
-				margin-bottom: 20upx;
+				margin-left: 10px;
+				margin-right: 10px;
+				padding-left: 10px;
+				padding-right: 10px;
+				height: realSize(576px);
+				background: rgba(255, 255, 255, 1);
+				box-shadow: 0px 10px 10px 0px rgba(0, 161, 124, 0.1);
+				border-radius: 10px;
+				// display: flex;
+				// flex-direction: row;
+				// align-items: stretch;
+				// justify-content: space-between;
+		
+				.left {
+					float: left;
+					height: 35px;
+					line-height: 35px;
+				}
+		
+				.right {
+					float: right;
+					height: 35px;
+					line-height: 35px;
+				}
+		
+				.clear {
+					clear: both;
+					margin-bottom: 20upx;
+				}
+		
+				.word_card {
+					height: 35px;
+					line-height: 35px;
+		
+					// overflow: hidden;
+					uni-image {
+						width: 40upx;
+						height: 40upx;
+						display: inline-block;
+						overflow: hidden;
+						position: relative;
+						padding-right: 10upx;
+						line-height: 40upx;
+					}
+		
+					uni-image>div,
+					uni-image>img {
+						width: 100%;
+						height: 100%;
+						margin-top: 3px;
+					}
+				}
+		
+				.right——img {
+					width: 30upx;
+					height: 30upx;
+				}
 			}
 		}
-	}
 
 </style>

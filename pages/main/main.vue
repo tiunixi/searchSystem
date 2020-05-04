@@ -77,12 +77,8 @@
 				console.log(response)
 				if (response.status === 200 && response.data.code === 200) {
 
-					that.menu = [
-						response.data.data.all,
-						response.data.data.en,
-						response.data.data.zh
-					]
-					console.log(that.menu)
+					that.menu = response.data.data.menu
+					// console.log(that.menu)
 
 				} else {
 					uni.showToast({

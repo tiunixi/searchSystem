@@ -46,7 +46,7 @@
 				providerList: [],
 				hasProvider: false,
 				account: 'zepuer@163.com',
-				password: '1',
+				password: '123456',
 				positionTop: 0,
 				isDevtools: false,
 			}
@@ -118,10 +118,8 @@
 				 * 实际开发中，使用 uni.request 将账号信息发送至服务端，客户端在回调函数中获取结果信息。
 				 */
 				const data = {
-					// account: this.account,
-					// pwd: this.password
-					account: 'zepuer@163.com',
-					pwd: 1
+					account: this.account,
+					pwd: this.password
 				};
 				let validUser = service.getUsers();
 

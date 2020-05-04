@@ -49,7 +49,7 @@
 	const BASE_URL = 'http://www.lexicon.com/';
 	const VALIUSER = service.getUsers();
 	const DATA = {
-		sid: VALIUSER[0].s_id?VALIUSER[0].s_id:0
+		sid: VALIUSER[0].sid?VALIUSER[0].sid:0
 	}
 	export default {
 		data () {
@@ -131,16 +131,20 @@
 				// }
 				// //TODO
 				// service.addUser(newData)
+				var that = this
 				uniRequest.post(BASE_URL + "index/index/buy", DATA).then(function(response) {
+					console.log(response)
 					if (response.status === 200 && response.data.code === 200) {
-						that.fishsum++;
+						that.fishsum = response.data.data.fishNum
+						that.balance = response.data.data.balance
 						const newData = {
 							account: VALIUSER[0].account,
 							pwd: VALIUSER[0].pwd,
 							s_id: VALIUSER[0].sid,
-							balance: VALIUSER[0].balance-3,//后台互自动增加减少
-							fishNum: VALIUSER[0].fishNum++,
 							nickname: VALIUSER[0].nickname,
+							balance: response.data.data.balance,//后台互自动增加减少
+							fishNum: response.data.data.fishNum,
+							
 						}
 						//TODO
 						service.addUser(newData)
