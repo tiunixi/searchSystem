@@ -54,6 +54,7 @@
 			<p>签到3天可以获取￥1金币</p>
 			<p>集齐3枚，可以买小鱼哦</p><br>
 			<p class="money">现有金币：￥{{balance}}</p>
+			<!-- <button type="" @click="toBuy()" class="toBuy">购买小鱼</button> -->
 		</view>
 	</view>
 </template>
@@ -62,9 +63,9 @@
 	import uniRequest from 'uni-request';
 	import service from '../service.js';
 	const BASE_URL = 'http://www.lexicon.com/';
-	const validUser = service.getUsers();
+	const VALIUSER = service.getUsers();
 	const data = {
-		sid: validUser[0].sid
+		sid: VALIUSER[0].sid
 	}
 	export default {
 		data() {
@@ -92,7 +93,7 @@
 			dataSource: { //已签到的数据源
 				type: Array,
 				default: () => {
-					return ["2020-05-04","2020-05-01"]
+					return []
 				}
 			},
 			langType: { //只是示例一个翻译而已，要想所有都翻译自己可以再加加
@@ -108,7 +109,7 @@
 			this.calculateEmptyGrids(this.cur_year, this.cur_month);
 			this.calculateDays(this.cur_year, this.cur_month);
 			this.onJudgeSign();
-			this.balance = validUser[0].balance;
+			this.balance = VALIUSER[0].balance;
 
 		},
 		watch: {
@@ -130,6 +131,7 @@
 			//<获取签到日期记录/>
 		},
 		methods: {
+			
 			// 获取当月共多少天
 			getThisMonthDays(year, month) {
 				return new Date(year, month, 0).getDate()
@@ -231,8 +233,23 @@
 				//if (res!= undefined) {
 				var str = "签到";
 				if (type !== 0) {
+					var that = this
+					console.log(VALIUSER[0],'1111')
 					uniRequest.post(BASE_URL + "index/index/sign", data).then(function(response) {
 						if (response.status === 200 && response.data.code === 200) {
+	
+							const newData = {
+								account: VALIUSER[0].account,
+								// pwd: VALIUSER[0].pwd,
+								sid: VALIUSER[0].sid,
+								nickname: VALIUSER[0].nickname,
+								balance: (VALIUSER[0].balance+1),//后台互自动增加减少
+								fishNum: VALIUSER[0].fishNum,
+								
+							}
+							//TODO
+							service.addUser(newData)
+							that.balance = VALIUSER[0].balance;
 							uni.showToast({
 								title: "签到成功",
 								icon: 'success',
@@ -262,6 +279,17 @@
 </script>
 
 <style lang="scss" scoped>
+	.toBuy {
+		width: 32%;
+		font-size: 29upx;
+		line-height: 64upx;
+		border-radius: 35upx;
+		margin-top: 19upx;
+		border: none;
+		background: #ff9700;
+		// background: rgba(252s, 135, 29, 1);
+		color: #fff;
+	}
 	.all {
 		margin-top: 18rpx;
 	}

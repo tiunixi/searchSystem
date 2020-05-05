@@ -145,20 +145,13 @@
 					if (response.status === 200) {
 						if (response.data.code === 200) {
 							// 登录成功后存入缓存数据addUser
-							const newData = {
-								account: that.email,
-								pwd: that.password,
-								s_id: that.sid
-							}
 							uni.showToast({
 								icon: 'none',
-								title: '登陆成功',
+								title: '请登录',
 								duration: 1000
 							});
-							service.addUser(newData)
-							console.log(1)
 							uni.reLaunch({
-								url: '../main/main',
+								url: '../login/login',
 							});
 						} else {
 							uni.showToast({

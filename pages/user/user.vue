@@ -117,25 +117,14 @@
 			 * 买小鱼
 			 * */
 			buy() {
-				// const VALIUSER = service.getUsers();
-				// console.log(VALIUSER[0])
-				// var that = this;
-				// const newData = {
-				// 	account: VALIUSER[0].account,
-				// 	sid: VALIUSER[0].sid,
-				// 	balance: VALIUSER[0].balance-3,//后台互自动增加减少
-				// 	fishNum: VALIUSER[0].fishNum+1,
-				// 	// nickname: VALIUSER[0].nickname,
-				// }
-				// //TODO
-				// service.addUser(newData)
 				var that = this
+				var  DATA = 0
 				if(VALIUSER[0]){
 					var  DATA = {
-						sid: VALIUSER[0].sid?VALIUSER[0].sid:0
+						sid: VALIUSER[0].sid
 					}
 				}
-				var  DATA = 0
+				console.log(DATA)
 				uniRequest.post(BASE_URL + "index/index/buy", DATA).then(function(response) {
 					console.log(response)
 					if (response.status === 200 && response.data.code === 200) {
@@ -143,14 +132,13 @@
 						that.balance = response.data.data.balance
 						const newData = {
 							account: VALIUSER[0].account,
-							pwd: VALIUSER[0].pwd,
-							s_id: VALIUSER[0].sid,
+							// pwd: VALIUSER[0].pwd,
+							sid: VALIUSER[0].sid,
 							nickname: VALIUSER[0].nickname,
 							balance: response.data.data.balance,//后台互自动增加减少
 							fishNum: response.data.data.fishNum,
 							
 						}
-						//TODO
 						service.addUser(newData)
 						// #ifdef MP-WEIXIN
 						that.$refs.fishWx.addfish(1)
@@ -267,7 +255,7 @@
 		margin-top: 20upx;
 		width: 100%;
 	}
-	.buy {
+	.sell {
 		width: 20%;
 		font-size: 20upx;
 		line-height: 64upx;
@@ -277,7 +265,7 @@
 		// background: rgba(252s, 135, 29, 1);
 		color: #fff;
 	}
-	.sell {
+	.buy {
 		width: 20%;
 		font-size: 20upx;
 		line-height: 64upx;

@@ -139,7 +139,7 @@
 								// 登录成功后存入缓存数据addUser 
 								const newData = {
 									account: data.account,
-									pwd: data.pwd,
+									// pwd: data.pwd,
 									sid: response.data.data.sid,
 									balance: response.data.data.balance,
 									fishNum: response.data.data.fishNum,
