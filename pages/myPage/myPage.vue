@@ -4,7 +4,8 @@
 			<view class="header_content">
 				<view class="left">
 					<text class="title">{{menu.title}}
-						<image v-if="menu.title" src="../../static/img/collect.png"></image>
+						<image v-if="menu.collect_status" src="../../static/img/collect.png" @click="calWord"></image>
+						<image v-else src="../../static/img/uncollect.png" @click="calWord"></image>
 					</text>
 					
 				</view>
@@ -59,7 +60,51 @@
 			}
 		},
 		methods: {
-
+				
+			calWord(){
+				var that = this
+				var  DATA = {
+						sid: 0,
+						id: this.id
+					}
+				if(VALIUSER[0]){
+					DATA = {
+						sid: VALIUSER[0].sid,
+						id: this.id
+					}
+				}
+				console.log('calword')
+				if(DATA.sid === 0){
+					uni.showToast({
+						icon: 'none',
+						title: '登录,才可收藏词汇'
+					});
+					return
+				}
+				var newUrl
+				if(this.menu.collect_status){
+					//1 是收藏状态，需要取消收藏
+					newUrl = "index/Handle/unCollect"
+				}else{
+					newUrl = "index/Handle/collect"
+				}
+				
+				uniRequest.post(BASE_URL + newUrl, DATA).then(function(response) {
+					console.log(response)
+					if (response.status === 200 && response.data.code === 200) {
+						// that.menu = response.data.data
+						that.menu.collect_status = !that.menu.collect_status
+				
+					} else {
+						uni.showToast({
+							icon: 'none',
+							title: response.data.msg
+						});
+					}
+				}).catch(function(error) {
+					console.log(error);
+				});
+			}
 		},
 		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
 			console.log(option); //打印出上个页面传递的参数。
@@ -82,6 +127,22 @@
 					that.menu = response.data.data
 
 
+				} else {
+					uni.showToast({
+						icon: 'none',
+						title: response.data.msg
+					});
+				}
+			}).catch(function(error) {
+				console.log(error);
+			});
+		
+			uniRequest.post(BASE_URL + "index/Handle/clickWord", DATA).then(function(response) {
+				console.log(response)
+				if (response.status === 200 && response.data.code === 200) {
+					// that.menu = response.data.data
+					console.log('增加浏览记录')
+				
 				} else {
 					uni.showToast({
 						icon: 'none',
@@ -175,6 +236,7 @@
 			    overflow: hidden;
 			    position: relative;
 			    padding-right: 10upx;
+				padding-left: 15upx;
 				vertical-align: middle;
 			}
 			.right{
@@ -190,8 +252,7 @@
 				
 			}
 			.left {
-				display: flex;
-				flex-direction: column;
+				
 				width: 57%;
 				margin: 10upx 30upx;
 
@@ -200,7 +261,9 @@
 					height: realSize(59px);
 					font-size: realSize(35px);
 					font-weight: bold;
+					padding-top: 16upx;
 					color: rgba(255, 255, 255, 1);
+					
 				}
 
 				.sub_title {
