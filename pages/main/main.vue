@@ -261,7 +261,7 @@
 			margin-right: 10px;
 			padding-left: 10px;
 			padding-right: 10px;
-			height: realSize(576px);
+			height: realSize(620px);
 			background: rgba(255, 255, 255, 1);
 			box-shadow: 0px 10px 10px 0px rgba(0, 161, 124, 0.1);
 			border-radius: 10px;
