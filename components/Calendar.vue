@@ -64,8 +64,13 @@
 	import service from '../service.js';
 	const BASE_URL = 'http://www.lexicon.com/';
 	const VALIUSER = service.getUsers();
-	const data = {
-		sid: VALIUSER[0].sid
+	var  DATA = {
+			sid: 0
+		}
+	if(VALIUSER[0]){
+		DATA = {
+			sid: VALIUSER[0].sid
+		}
 	}
 	export default {
 		data() {
@@ -109,7 +114,7 @@
 			this.calculateEmptyGrids(this.cur_year, this.cur_month);
 			this.calculateDays(this.cur_year, this.cur_month);
 			this.onJudgeSign();
-			this.balance = VALIUSER[0].balance;
+			this.balance = VALIUSER[0]? VALIUSER[0].balance:0;
 
 		},
 		watch: {
@@ -117,8 +122,16 @@
 		},
 		onLoad() {
 			//<获取签到日期记录>
-
-			uniRequest.post(BASE_URL + "index/index/signLog", data).then(function(response) {
+			const VALIUSER = service.getUsers();
+			var  DATA = {
+					sid: 0
+				}
+			if(VALIUSER[0]){
+				  DATA = {
+					sid: VALIUSER[0].sid
+				}
+			}
+			uniRequest.post(BASE_URL + "index/index/signLog", DATA).then(function(response) {
 				if (response.status === 200 && response.data.code === 200) {
 					console.log(response.data.data);
 				} else {
@@ -235,7 +248,7 @@
 				if (type !== 0) {
 					var that = this
 					console.log(VALIUSER[0],'1111')
-					uniRequest.post(BASE_URL + "index/index/sign", data).then(function(response) {
+					uniRequest.post(BASE_URL + "index/index/sign", DATA).then(function(response) {
 						if (response.status === 200 && response.data.code === 200) {
 	
 							const newData = {

@@ -22,7 +22,7 @@
 				<view class="no-show"  v-else>
 					暂无收藏
 				</view>
-				<view class="example-body">
+				<view class="example-body" v-if="menu.length !== 0 ">
 					<uni-pagination :current="current" :total="total" title="标题文字" :show-icon="true" @change="change" />
 				</view>
 			</view>
@@ -65,11 +65,12 @@
 		onShow() {
 			// console.log(1)
 			var that = this;
-			var  DATA = 0
-			if(typeof VALIUSER === 'object'){
-				console.log(1)
-			    DATA = {
-					sid: VALIUSER[0].sid?VALIUSER[0].sid:0
+			var  DATA = {
+					sid: 0
+				}
+			if(VALIUSER[0]){
+				  DATA = {
+					sid: VALIUSER[0].sid
 				}
 			}
 

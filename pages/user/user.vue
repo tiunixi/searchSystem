@@ -52,8 +52,8 @@
 	export default {
 		data () {
 		   return {
-		    fishsum: VALIUSER[0].fishNum,
-			balance:VALIUSER[0].balance,
+		    fishsum: VALIUSER[0]?VALIUSER[0].fishNum:0,
+			balance:VALIUSER[0]?VALIUSER[0].balance:0,
 			loginToOut:true,
 			menus: [{
 						name: '我的收藏',
@@ -118,9 +118,11 @@
 			 * */
 			buy() {
 				var that = this
-				var  DATA = 0
+				var  DATA = {
+						sid: 0
+					}
 				if(VALIUSER[0]){
-					var  DATA = {
+					  DATA = {
 						sid: VALIUSER[0].sid
 					}
 				}

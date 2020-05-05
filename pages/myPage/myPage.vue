@@ -66,15 +66,16 @@
 			this.id = option.id
 
 			var that = this;
-			var DATA = 0
-			if (typeof VALIUSER === 'object') {
-				console.log(1)
+			var  DATA = {
+					sid: 0,
+					id: option.id
+				}
+			if(VALIUSER[0]){
 				DATA = {
 					sid: VALIUSER[0].sid,
 					id: option.id
 				}
 			}
-			console.log(DATA)
 			uniRequest.post(BASE_URL + "index/index/detail", DATA).then(function(response) {
 				console.log(response)
 				if (response.status === 200 && response.data.code === 200) {

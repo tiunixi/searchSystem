@@ -32,12 +32,17 @@
 		},
 		onLoad() {
 			//<获取签到日期记录>
-			const validUser = service.getUsers();
-			const data = {
-				sid: validUser[0].sid
+			const VALIUSER = service.getUsers();
+			var  DATA = {
+					sid: 0
+				}
+			if(VALIUSER[0]){
+				  DATA = {
+					sid: VALIUSER[0].sid
+				}
 			}
 			var that = this
-			uniRequest.post(BASE_URL + "index/index/signLog", data).then(function(response) {
+			uniRequest.post(BASE_URL + "index/index/signLog", DATA).then(function(response) {
 				console.log(response)
 				if (response.status === 200 && response.data.code === 200) {
 					console.log(response.data.data);
@@ -46,6 +51,10 @@
 					
 				} else {
 					console.log('获取信息失败')
+					uni.showToast({
+						icon: 'none',
+						title: response.data.msg
+					});
 				}
 			}).catch(function(error) {
 
