@@ -18,13 +18,13 @@
 			</view>
 		</view>
 		<view class="page_content">
-			<view class="menu">
+			<view class="menu"  v-if="menu.desc !== '' ">
 				<view class="intro title_m">
 					{{menu.desc}}
 				</view>
 				<br>
 			</view>
-			<view class="menu">
+			<view class="menu"  v-if="menu.content !== '' ">
 				<view class="introduction title_m">
 					{{menu.content}}
 				</view>
@@ -90,7 +90,7 @@
 				}
 				
 				uniRequest.post(BASE_URL + newUrl, DATA).then(function(response) {
-					console.log(response)
+					
 					if (response.status === 200 && response.data.code === 200) {
 						// that.menu = response.data.data
 						that.menu.collect_status = !that.menu.collect_status
@@ -123,6 +123,7 @@
 			}
 			uniRequest.post(BASE_URL + "index/index/detail", DATA).then(function(response) {
 				console.log(response)
+				console.log(response.data.data.desc,'22',response.data.data.desc ==='')
 				if (response.status === 200 && response.data.code === 200) {
 					that.menu = response.data.data
 
@@ -319,6 +320,13 @@
 				text-indent: 2em;
 			}
 			
+		}
+			
+		.intro {
+			line-height: realSize(26px);
+		}
+		.introduction{
+			line-height: realSize(36px);
 		}
 	}
 </style>
