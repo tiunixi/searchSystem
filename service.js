@@ -7,6 +7,8 @@ const getUsers = function() {
 	if (!ret) {
 		ret = '[]';
 	}
+	console.log('getUsers')
+	console.log(JSON.parse(ret))
 	return JSON.parse(ret);
 }
 

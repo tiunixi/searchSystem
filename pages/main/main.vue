@@ -37,7 +37,9 @@
 									</view>
 									<view class="right in_b">
 										<image src="../../static/img/eye.png"></image>
-										{{ item.clickNum }}
+										<text class="title">
+											{{item.clickNum}}
+										</text>
 									</view>
 									<view class="clear"></view>
 								</view>
@@ -55,10 +57,10 @@
 	import uniRequest from 'uni-request';
 	import service from '../../service.js';
 	const BASE_URL = 'http://www.lexicon.com/';
-	const validUser = service.getUsers();
-	const data = {
-		sid: validUser[0].s_id
-	}
+	const VALIUSER = service.getUsers();
+	// const DATA = {
+	// 	sid: VALIUSER[0].sid
+	// }
 	export default {
 		components: {
 			tabControl
@@ -71,9 +73,16 @@
 			}
 		},
 		onShow() {
-			console.log(1)
+			// console.log(1)
+			if(VALIUSER[0]){
+				var  DATA = {
+					sid: VALIUSER[0].sid?VALIUSER[0].sid:0
+				}
+			}
+			console.log(VALIUSER[0])
+			var  DATA = 0
 			var that = this;
-			uniRequest.post(BASE_URL + "index/index/index", data).then(function(response) {
+			uniRequest.post(BASE_URL + "index/index/index", DATA).then(function(response) {
 				console.log(response)
 				if (response.status === 200 && response.data.code === 200) {
 
@@ -271,6 +280,12 @@
 				float: right;
 				height: 35px;
 				line-height: 35px;
+				display: table-cell;
+				.title{
+					// font-size: realSize(25px);
+					display: inline-block;
+					vertical-align: middle;
+				}
 			}
 
 			.clear {
@@ -290,7 +305,7 @@
 					overflow: hidden;
 					position: relative;
 					padding-right: 10upx;
-					line-height: 40upx;
+					vertical-align: middle;
 				}
 
 				uni-image>div,

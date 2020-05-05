@@ -48,9 +48,7 @@
 	import service from '../../service.js';
 	const BASE_URL = 'http://www.lexicon.com/';
 	const VALIUSER = service.getUsers();
-	const DATA = {
-		sid: VALIUSER[0].sid?VALIUSER[0].sid:0
-	}
+	
 	export default {
 		data () {
 		   return {
@@ -132,6 +130,12 @@
 				// //TODO
 				// service.addUser(newData)
 				var that = this
+				if(VALIUSER[0]){
+					var  DATA = {
+						sid: VALIUSER[0].sid?VALIUSER[0].sid:0
+					}
+				}
+				var  DATA = 0
 				uniRequest.post(BASE_URL + "index/index/buy", DATA).then(function(response) {
 					console.log(response)
 					if (response.status === 200 && response.data.code === 200) {

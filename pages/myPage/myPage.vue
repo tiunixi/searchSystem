@@ -1,62 +1,96 @@
 <template>
-	<view class="page_edu">
+	<view class="page_edu" >
 		<view class="page_edu_header">
 			<view class="header_content">
 				<view class="left">
-					<text class="title">比特币（Bitcoin）</text>
+					<text class="title">{{menu.title}}
+						<image v-if="menu.title" src="../../static/img/collect.png"></image>
+					</text>
+					
+				</view>
+				<view class="right">
+						<image src="../../static/img/eye.png"></image>
+					<text class="title">	
+						{{menu.clickNum}}
+					</text>
 				</view>
 			</view>
 		</view>
 		<view class="page_content">
 			<view class="menu">
 				<view class="intro title_m">
-					比特币（Bitcoin）的概念最初由中本聪在2008年11月1日提出，并于2009年1月3日正式诞生 [1]  。根据中本聪的思路设计发布的开源软件以及建构其上的P2P网络。比特币是一种P2P形式的虚拟的加密数字货币。点对点的传输意味着一个去中心化的支付系统。
+					{{menu.desc}}
 				</view>
 				<br>
-				<br>
-				<!-- <view class="introduction title_m">
-					与所有的货币不同，比特币不依靠特定货币机构发行，它依据特定算法，通过大量的计算产生，比特币经济使用整个P2P网络中众多节点构成的分布式数据库来确认并记录所有的交易行为，并使用密码学的设计来确保货币流通各个环节安全性。P2P的去中心化特性与算法本身可以确保无法通过大量制造比特币来人为操控币值。基于密码学的设计可以使比特币只能被真实的拥有者转移或支付。这同样确保了货币所有权与流通交易的匿名性。比特币与其他虚拟货币最大的不同，是其总数量非常有限，具有极强的稀缺性。
-					<br>
-					2017年12月17日，比特币达到历史最高价19850美元。
-					2020年2月10日，比特币价格突破10000美元。
-				</view>
-				<br>
-				<br> -->
 			</view>
 			<view class="menu">
-				<!-- <view class="intro title_m">
-					比特币（Bitcoin）的概念最初由中本聪在2008年11月1日提出，并于2009年1月3日正式诞生 [1]  。根据中本聪的思路设计发布的开源软件以及建构其上的P2P网络。比特币是一种P2P形式的虚拟的加密数字货币。点对点的传输意味着一个去中心化的支付系统。
-				</view>
-				<br>
-				<br> -->
 				<view class="introduction title_m">
-					与所有的货币不同，比特币不依靠特定货币机构发行，它依据特定算法，通过大量的计算产生，比特币经济使用整个P2P网络中众多节点构成的分布式数据库来确认并记录所有的交易行为，并使用密码学的设计来确保货币流通各个环节安全性。P2P的去中心化特性与算法本身可以确保无法通过大量制造比特币来人为操控币值。基于密码学的设计可以使比特币只能被真实的拥有者转移或支付。这同样确保了货币所有权与流通交易的匿名性。比特币与其他虚拟货币最大的不同，是其总数量非常有限，具有极强的稀缺性。
-					<br>
-					2017年12月17日，比特币达到历史最高价19850美元。
-					2020年2月10日，比特币价格突破10000美元。
+					{{menu.content}}
 				</view>
-				<br>
-				<br>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import uniRequest from 'uni-request';
+	import service from '../../service.js';
+	const BASE_URL = 'http://www.lexicon.com/';
+	const VALIUSER = service.getUsers();
 	export default {
 		data() {
 			return {
-				id:null
+				id: null,
+				menu: {
+
+					// clickNum: 2,
+					// content: "n  1.  (Computer Science) (usually capital) a system of open source peer-to-peer software for the creation and exchange of (payment in) a certain type of cryptocurrency; the first such system to be fully functional  2.  (Currencies) (sometimes capital) the cryptocurrency created and exchanged using this software",
+					// createTime: "2020-02-15 15:50:05",
+					// desc: "Related to bitcoin: Bitcoin mining, Bitcoin wallet, Bitcoin miner",
+					// id: 53,
+					// key: "bitcoin",
+					// likeNum: 2,
+					// link: "https://www.thefreedictionary.com/bitcoin",
+					// sort: 0,
+					// stepNum: 0,
+					// title: "bitcoin",
+					// type: 1,
+				}
 			}
 		},
 		methods: {
-			
-		},	
-	    onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
-	        console.log(option); //打印出上个页面传递的参数。
-	        console.log(option); //打印出上个页面传递的参数。
-			this.id = option
-	    }
+
+		},
+		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
+			console.log(option); //打印出上个页面传递的参数。
+			this.id = option.id
+
+			var that = this;
+			var DATA = 0
+			if (typeof VALIUSER === 'object') {
+				console.log(1)
+				DATA = {
+					sid: VALIUSER[0].sid,
+					id: option.id
+				}
+			}
+			console.log(DATA)
+			uniRequest.post(BASE_URL + "index/index/detail", DATA).then(function(response) {
+				console.log(response)
+				if (response.status === 200 && response.data.code === 200) {
+					that.menu = response.data.data
+
+
+				} else {
+					uni.showToast({
+						icon: 'none',
+						title: response.data.msg
+					});
+				}
+			}).catch(function(error) {
+				console.log(error);
+			});
+		}
 	}
 </script>
 
@@ -71,24 +105,28 @@
 	@function realSize($args) {
 		@return $args / 1.5;
 	}
-	.in_b{
+
+	.in_b {
 		display: inline-block;
 	}
+
 	.page_edu {
 		width: 100%;
 	}
-		
+
 	.menu {
 		uni-scroll-view {
 			display: block;
 			width: 90%;
 		}
 	}
+
 	.swiper {
 		margin-top: 100upx;
 		padding: 25upx;
 		text-align: center;
 	}
+
 	.page_edu_header {
 		padding-top: var(--status-bar-height);
 		background-color: #00aeff;
@@ -129,7 +167,27 @@
 		.header_content {
 			display: flex;
 			flex-direction: row;
-
+			uni-image {
+			    width: 50upx;
+			    height: 50upx;
+			    display: inline-block;
+			    overflow: hidden;
+			    position: relative;
+			    padding-right: 10upx;
+				vertical-align: middle;
+			}
+			.right{
+				float: right;
+				height: 45px;
+				line-height: 45px;
+				display: table-cell;
+				.title{
+					// font-size: realSize(25px);
+					display: inline-block;
+					vertical-align: middle;
+				}
+				
+			}
 			.left {
 				display: flex;
 				flex-direction: column;
@@ -181,19 +239,22 @@
 			margin: 30upx 10px;
 			padding: 30upx 20upx;
 			// height: realSize(576px);
-			padding: 20upx 30upx ;
+			padding: 20upx 30upx;
 			// height: realSize(576px);
 			background: rgba(255, 255, 255, 1);
 			box-shadow: 0px 10px 10px 0px rgba(0, 161, 124, 0.1);
 			border-radius: 10px;
+
 			// display: flex;
 			// flex-direction: row;
 			// align-items: stretch;
 			// justify-content: space-between;
-			.title_m{
-				    text-align: justify; text-justify: inter-ideograph; text-indent: 2em;
+			.title_m {
+				text-align: justify;
+				text-justify: inter-ideograph;
+				text-indent: 2em;
 			}
+			
 		}
 	}
-
 </style>
