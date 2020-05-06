@@ -23,15 +23,15 @@
 				try {
 				    const value = uni.getStorageSync('launchFlag');
 				    if (value) {
-				        if (value == true) {
-				            uni.switchTab({
-				                url: '/pages/main/main'
-				            });
-				        } else {
+				        // if (value == true) {
+				        //     uni.switchTab({
+				        //         url: '/pages/main/main'
+				        //     });
+				        // } else {
 				            uni.redirectTo({
 				                url: '/pages/index/guide'
 				            });
-				        }
+				        // }
 				    } else {
 				        uni.setStorage({
 				            key: 'launchFlag',

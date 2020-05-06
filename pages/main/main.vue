@@ -84,15 +84,19 @@
 			var that = this;
 			uniRequest.post(BASE_URL + "index/index/index", DATA).then(function(response) {
 				console.log(response)
-				if (response.status === 200 && response.data.code === 200) {
-
-					that.menu = response.data.data.menu
-					// console.log(that.menu)
-
-				} else {
+				if (response.status === 200 ) {
+					if( response.data.code === 200){
+						that.menu = response.data.data.menu
+					}else {
 					uni.showToast({
 						icon: 'none',
 						title: response.data.msg
+					});
+					} 
+				}else {
+					uni.showToast({
+						icon: 'none',
+						title: '请稍后重试'
 					});
 				}
 			}).catch(function(error) {

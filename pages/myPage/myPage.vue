@@ -23,6 +23,7 @@
 					{{menu.desc}}
 				</view>
 				<br>
+				<text class="creat-time">本站爬取时间： {{menu.createTime}}</text>
 			</view>
 			<view class="menu"  v-if="menu.content !== '' ">
 				<view class="introduction title_m">
@@ -171,8 +172,11 @@
 
 	.in_b {
 		display: inline-block;
+		font-size: 30upx;
 	}
-
+	.creat-time {
+		font-size: 28upx;
+	}
 	.page_edu {
 		width: 100%;
 	}
@@ -309,7 +313,7 @@
 			background: rgba(255, 255, 255, 1);
 			box-shadow: 0px 10px 10px 0px rgba(0, 161, 124, 0.1);
 			border-radius: 10px;
-
+			
 			// display: flex;
 			// flex-direction: row;
 			// align-items: stretch;
@@ -318,6 +322,7 @@
 				text-align: justify;
 				text-justify: inter-ideograph;
 				text-indent: 2em;
+				font-size: 38upx;
 			}
 			
 		}
